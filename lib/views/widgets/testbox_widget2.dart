@@ -31,7 +31,7 @@ class TextboxWidget2 extends StatelessWidget {
             color: AppColors.text,
             fontSize: AppSizes.size16,
           ),
-          cursorColor: AppColors.primaryColor,
+          cursorColor: AppColors.primary,
           controller: controller,
           obscureText: isPassword,
           keyboardType: keyboardType,

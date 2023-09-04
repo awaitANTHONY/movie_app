@@ -8,7 +8,7 @@ class AppStyles {
     fontWeight: FontWeight.normal,
   );
   static final TextStyle text2 = TextStyle(
-    color: AppColors.primaryColor,
+    color: AppColors.primary,
     fontSize: AppSizes.size16,
     fontWeight: FontWeight.w500,
   );

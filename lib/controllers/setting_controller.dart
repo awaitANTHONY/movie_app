@@ -36,6 +36,9 @@ class SettingController extends GetxController {
   }
 
   loadData() async {
+    await Future.delayed(3.seconds);
+    Get.offAll(() => const ParentScreen(page: 4));
+    return;
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       try {
@@ -181,7 +184,7 @@ class SettingController extends GetxController {
     Get.changeThemeMode(isDarkMode.value ? ThemeMode.dark : ThemeMode.light);
 
     isNotificationEnable.value = readStorage('isNotificationEnable') ?? false;
-    notificationStatus(isNotificationEnable.value);
+    //notificationStatus(isNotificationEnable.value);
 
     super.onInit();
     loadData();

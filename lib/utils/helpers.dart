@@ -74,7 +74,7 @@ datePicker(
     builder: (BuildContext context, Widget? child) {
       return Theme(
         data: ThemeData.light().copyWith(
-          primaryColor: AppColors.primaryColor,
+          primaryColor: AppColors.primary,
           colorScheme: ColorScheme.light(
             primary: Theme.of(context).primaryColor,
           ),
@@ -133,12 +133,12 @@ Widget cachedNetworkImage(
           return SizedBox(
             height: height,
             width: width,
-            child: const Center(
+            child: Center(
               child: SizedBox(
                 height: 30,
                 width: 30,
                 child: CircularProgressIndicator(
-                  color: AppColors.primaryColor,
+                  color: AppColors.primary,
                 ),
               ),
             ),

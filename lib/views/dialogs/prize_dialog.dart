@@ -29,7 +29,7 @@ prizeDialog(BuildContext context, Map<String, String> data) {
                           alignment: Alignment.center,
                           width: double.infinity,
                           height: 40,
-                          color: AppColors.primaryColor,
+                          color: AppColors.primary,
                           child: Text(
                             'Prize Pool',
                             style: AppStyles.heading.copyWith(

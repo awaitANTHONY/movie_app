@@ -61,7 +61,7 @@ class TextboxWidget extends StatelessWidget {
                 fontSize: AppSizes.size14,
               ),
               decoration: AppStyles.textInputDecoration(lableText, hintText),
-              cursorColor: AppColors.primaryColor,
+              cursorColor: AppColors.primary,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return hintText;

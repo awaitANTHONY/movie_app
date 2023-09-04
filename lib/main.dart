@@ -3,9 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:movie_app/controllers/home_controller.dart';
 import '/consts/consts.dart';
 import '/controllers/setting_controller.dart';
 import '/views/screens/splash_screen.dart';
+import 'controllers/genre_controller.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,10 +20,10 @@ main() async {
         appBarTheme: const AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle.light,
         ),
-        primaryColor: AppColors.primaryColor,
+        primaryColor: AppColors.primary,
         fontFamily: GoogleFonts.hind().fontFamily,
         colorScheme: ColorScheme.fromSwatch().copyWith(
-          secondary: AppColors.primaryColor,
+          secondary: AppColors.primary,
         ),
       ),
       title: AppTexts.appName,
@@ -35,7 +37,8 @@ main() async {
       },
       onInit: () {
         Get.put(SettingController());
-        //Get.put(AuthController());
+        Get.put(HomeController());
+        Get.put(GenreController());
       },
       home: const MyApp(),
     ),

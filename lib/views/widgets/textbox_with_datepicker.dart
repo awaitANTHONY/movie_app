@@ -39,9 +39,9 @@ class _TextboxWidgetDatepickerState extends State<TextboxWidgetDatepicker> {
         return Theme(
           data: ThemeData.dark().copyWith(
             colorScheme: ColorScheme.light(
-              primary: AppColors.primaryColor,
+              primary: AppColors.primary,
               onPrimary: Colors.white,
-              surface: AppColors.primaryColor,
+              surface: AppColors.primary,
               onSurface: AppColors.text2,
             ),
             dialogBackgroundColor: Colors.white,
@@ -69,7 +69,7 @@ class _TextboxWidgetDatepickerState extends State<TextboxWidgetDatepicker> {
             color: AppColors.text2,
             fontSize: AppSizes.size16,
           ),
-          cursorColor: AppColors.primaryColor,
+          cursorColor: AppColors.primary,
           controller: widget.controller,
           keyboardType: TextInputType.datetime,
           readOnly: true,
@@ -96,7 +96,7 @@ class _TextboxWidgetDatepickerState extends State<TextboxWidgetDatepicker> {
             ),
             suffixIcon: Icon(
               Icons.date_range,
-              color: AppColors.primaryColor,
+              color: AppColors.primary,
               size: AppSizes.size16,
             ),
             suffixIconConstraints: const BoxConstraints(

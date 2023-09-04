@@ -85,8 +85,8 @@
 //                                 begin: Alignment.centerLeft,
 //                                 end: Alignment.centerRight,
 //                                 colors: [
-//                                   AppColors.primaryColor,
-//                                   AppColors.primaryColor.withOpacity(0.8),
+//                                   AppColors.primary,
+//                                   AppColors.primary.withOpacity(0.8),
 //                                 ],
 //                               ),
 //                             ),

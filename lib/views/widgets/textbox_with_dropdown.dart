@@ -41,7 +41,7 @@
 //         },
 //         dropdownButtonBuilder: (context) => Icon(
 //           Icons.expand_more,
-//           color: AppColors.primaryColor,
+//           color: AppColors.primary,
 //         ),
 //         dropdownSearchDecoration: InputDecoration(
 //           labelStyle: TextStyle(
