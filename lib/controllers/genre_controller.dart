@@ -49,6 +49,6 @@ class GenreController extends GetxController {
   void onInit() {
     super.onInit();
 
-    loadGenres();
+    //loadGenres();
   }
 }

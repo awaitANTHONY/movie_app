@@ -10,40 +10,39 @@ import 'package:movie_app/utils/helpers.dart';
 class HomeController extends GetxController {
   RxBool isLoading = true.obs;
   RxList<Movie> banners = <Movie>[].obs;
-  RxList<Sliders> sliders = <Sliders>[].obs;
+  RxList sliders = [].obs;
   RxInt currentIndex = 0.obs;
+  RxList<Menu> menus = <Menu>[].obs;
 
   loadHome() async {
     isLoading.value = true;
 
-    try {
-      String url = '${AppConsts.baseUrl}${AppConsts.home}';
-      Map<String, String> headers = {
-        'X-API-KEY': AppConsts.apiKey,
-      };
+    //try {
+    String url = AppConsts.home;
+    Map<String, String> headers = {
+      'X-API-KEY': AppConsts.apiKey,
+    };
 
-      Map<String, dynamic> body = {};
-      var response = await ApiService.post(
-        url,
-        headers: headers,
-        body: body,
-      );
+    var response = await ApiService.get(
+      url,
+      headers: headers,
+    );
 
-      dd(response.body);
-
-      var jsonString = response.body;
-      var responseModel = Home.fromJson(jsonDecode(jsonString));
-      if (response.statusCode == 200) {
-        banners.value = responseModel.banner ?? [];
-        sliders.value = responseModel.sliders ?? [];
-      } else {
-        showToast('Unknown error.');
-      }
-    } catch (e) {
-      //
-    } finally {
-      isLoading.value = false;
+    var jsonString = response.body;
+    var responseModel = jsonDecode(jsonString);
+    if (response.statusCode == 200) {
+      menus.clear();
+      responseModel.forEach((element) {
+        menus.add(Menu.fromJson(element));
+      });
+    } else {
+      showToast('Unknown error.');
     }
+    // } catch (e) {
+    //   //
+    // } finally {
+    //   isLoading.value = false;
+    // }
   }
 
   @override

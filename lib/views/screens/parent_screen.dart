@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:movie_app/views/screens/home_screen.dart';
+import 'package:movie_app/views/screens/news_screen.dart';
 import '/consts/consts.dart';
 import 'genre_screen.dart';
 
@@ -56,7 +57,7 @@ class ParentScreenState extends State<ParentScreen> {
           children: [
             GenreScreen(),
             Container(),
-            Container(),
+            NewsScreen(),
             Container(),
             HomeScreen(),
           ],
@@ -81,9 +82,9 @@ class ParentScreenState extends State<ParentScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: Obx(() {
         return Container(
-          color: AppColors.background,
+          color: AppColors.text.withOpacity(0.02),
           child: AnimatedBottomNavigationBar(
-            backgroundColor: AppColors.background2,
+            backgroundColor: Color.fromRGBO(18, 18, 18, 0.7),
             icons: const [
               AssetImage('assets/images/icons/mozy.png'),
               AssetImage('assets/images/icons/menu.png'),

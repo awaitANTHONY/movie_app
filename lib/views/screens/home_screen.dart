@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          SliderWidget(),
+          //SliderWidget(),
           HomeCategoryWidget(),
           HomeSliderWidget(),
         ],

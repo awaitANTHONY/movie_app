@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:movie_app/controllers/home_controller.dart';
+import 'package:movie_app/controllers/news_controller.dart';
 import '/consts/consts.dart';
 import '/controllers/setting_controller.dart';
 import '/views/screens/splash_screen.dart';
@@ -39,6 +40,7 @@ main() async {
         Get.put(SettingController());
         Get.put(HomeController());
         Get.put(GenreController());
+        Get.put(NewsController());
       },
       home: const MyApp(),
     ),

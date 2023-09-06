@@ -1,8 +1,9 @@
+import 'package:movie_app/controllers/home_controller.dart';
+
+import '/consts/consts.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:movie_app/controllers/genre_controller.dart';
-import '/utils/helpers.dart';
-import '/consts/consts.dart';
+//import 'webview_screen.dart';
 
 class GenreScreen extends StatefulWidget {
   const GenreScreen({super.key});
@@ -12,97 +13,123 @@ class GenreScreen extends StatefulWidget {
 }
 
 class _GenreScreenState extends State<GenreScreen> {
-  GenreController genreController = Get.find();
-
+  HomeController homeController = Get.find();
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      if (genreController.isLoading.value) {
-        return Center(
-          child: CircularProgressIndicator(
-            color: Theme.of(context).primaryColor,
+    return ListView.separated(
+      itemCount: homeController.menus.length,
+      padding: const EdgeInsets.only(top: 5),
+      itemBuilder: (context, index) {
+        var menu = homeController.menus[index];
+
+        if ((menu.tabs?.length ?? 0) > 0 &&
+            menu.tabs![0].provider == 'custom') {
+          return SizedBox();
+        }
+        return Card(
+          elevation: 1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
           ),
-        );
-      }
-      if (genreController.genres.isEmpty) {
-        return Center(
-          child: Text(
-            'No categories available.',
-            style: AppStyles.heading.copyWith(
-              fontSize: AppSizes.size15,
-              color: AppColors.text.withOpacity(0.8),
+          margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 7),
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              dividerColor: Colors.transparent,
+              colorScheme: ColorScheme.fromSwatch().copyWith(
+                secondary: Colors.black,
+              ),
+            ),
+            child: ListTileTheme(
+              dense: true,
+              minVerticalPadding: 0,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(0),
+                child: ExpansionTile(
+                  initiallyExpanded: true,
+                  iconColor: AppColors.primary,
+                  collapsedIconColor: AppColors.primary,
+                  backgroundColor: AppColors.background2,
+                  collapsedBackgroundColor: AppColors.background2,
+                  collapsedTextColor: AppColors.text,
+                  textColor: AppColors.text,
+                  childrenPadding: const EdgeInsets.only(
+                    bottom: 8.0,
+                    left: 5.0,
+                    right: 5.0,
+                  ),
+                  title: Text(
+                    menu.title!.toUpperCase(),
+                    style: AppStyles.heading.copyWith(
+                      fontSize: AppSizes.size16,
+                      color: AppColors.text,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  subtitle: Text(menu.submenu!),
+                  children: <Widget>[
+                    Container(
+                      width: double.infinity,
+                      height: 0.5,
+                      color: AppColors.border,
+                    ),
+                    Column(
+                      children: menu.tabs!
+                          .map(
+                            (e) => CustomListTIle(
+                              title: (e.title != '' ? e.title! : menu.title!)
+                                  .toUpperCase(),
+                              url: 'https://www.transunion.com',
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         );
-      }
-      return Container(
-        child: GridView.count(
-          padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 10),
-          crossAxisCount: 2,
-          childAspectRatio: 1.5,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          children: List.generate(
-            genreController.genres.length,
-            (index) {
-              var item = genreController.genres[index];
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: InkWell(
-                  onTap: () {
-                    // AdsService.showInterstitialAd(() {
-                    //   Get.to(() => CategoryChannelScreen(item));
-                    // });
-                  },
-                  child: Stack(
-                    children: [
-                      Stack(
-                        children: [
-                          cachedNetworkImage(
-                            item.genreImage!,
-                            width: double.infinity,
-                            height: double.infinity,
-                            fit: BoxFit.fill,
-                          ),
-                          Container(
-                            width: double.infinity,
-                            height: double.infinity,
-                            color: Colors.black.withOpacity(0.3),
-                          ),
-                        ],
-                      ),
-                      Positioned(
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        top: 0,
-                        child: Container(
-                          height: AppSizes.size28,
-                          width: double.infinity,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: AppColors.background.withOpacity(0.3),
-                          ),
-                          child: Text(
-                            item.name!,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: AppSizes.size16,
-                              color: Colors.white,
-                            ),
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
+      },
+      separatorBuilder: (context, index) => 10.0.spaceY,
+    );
+  }
+}
+
+class CustomListTIle extends StatelessWidget {
+  const CustomListTIle({
+    Key? key,
+    required this.title,
+    required this.url,
+  }) : super(key: key);
+
+  final String title;
+  final String url;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: () {
+        Map arguments = {
+          'title': title,
+          'url': url,
+        };
+        //Get.to(() => WebviewScreen(arguments));
+      },
+      title: Text(
+        title,
+        style: AppStyles.heading.copyWith(
+          fontSize: AppSizes.size14,
+          color: AppColors.text.withOpacity(0.7),
         ),
-      );
-    });
+        textAlign: TextAlign.left,
+      ),
+      trailing: Icon(
+        Icons.arrow_forward_ios,
+        size: AppSizes.size18,
+        color: AppColors.primary,
+      ),
+    );
   }
 }
