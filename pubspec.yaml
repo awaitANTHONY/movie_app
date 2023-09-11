@@ -61,6 +61,8 @@ dependencies:
   flutter_html: ^3.0.0-beta.2
   flutter_inapp_purchase: ^5.4.2
   pod_player: ^0.2.1
+  google_mobile_ads: ^3.0.0
+  easy_audience_network: ^0.0.6
 
 dev_dependencies:
   flutter_test:

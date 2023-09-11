@@ -34,6 +34,7 @@ class SettingController extends GetxController {
   RxBool isNotificationEnable = false.obs;
   RxBool isVibrationEnable = false.obs;
   RxBool isSubscribed = false.obs;
+  RxBool enableDownload = true.obs;
 
   RxList<String> titles = ['Menu', 'Top', 'News', 'Settings', 'Home'].obs;
 
@@ -42,23 +43,16 @@ class SettingController extends GetxController {
   }
 
   loadData() async {
-    await Future.delayed(3.seconds);
-    Get.offAll(() => const ParentScreen(page: 4));
-    return;
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       try {
-        String url = '${AppConsts.baseUrl}${AppConsts.settings}';
+        String url = AppConsts.settings;
         Map<String, String> headers = {
           'X-API-KEY': AppConsts.apiKey,
         };
-        Map<String, dynamic> body = {
-          'platform': Platform.isIOS ? 'ios' : 'android',
-        };
-        var response = await ApiService.post(
+        var response = await ApiService.get(
           url,
           headers: headers,
-          body: body,
         );
 
         var jsonString = response.body;
@@ -66,7 +60,7 @@ class SettingController extends GetxController {
 
         if (responseModel.status == true) {
           store(responseModel);
-          await Future.delayed(2.seconds);
+          await Future.delayed(3.seconds);
           Get.offAll(() => const ParentScreen(page: 4));
         } else {
           showSnackBar('Server Error! Please Try again.');
@@ -92,6 +86,7 @@ class SettingController extends GetxController {
     interstitialPlacementId.value = quickSetting.interstitialAdCode ?? "";
     adsStatus.value = quickSetting.enableAds != '0';
     nativePlacementId.value = quickSetting.nativeAdCode ?? "";
+    enableDownload.value = quickSetting.enableDownload != '0';
     appInfo.value = packageInfo;
 
     dd(adsStatus.value);
@@ -99,6 +94,7 @@ class SettingController extends GetxController {
     dd(bannerPlacementId.value);
     dd(interstitialPlacementId.value);
     dd(nativePlacementId.value);
+    dd(enableDownload.value);
     dd(appInfo);
   }
 

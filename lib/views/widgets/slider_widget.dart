@@ -91,7 +91,7 @@ class SliderWidget extends StatelessWidget {
             },
             options: CarouselOptions(
               autoPlay: true,
-              height: AppSizes.newSize(25),
+              height: AppSizes.newSize(30),
               viewportFraction: 1.0,
               onPageChanged: (int page, CarouselPageChangedReason reason) {
                 settingController.currentIndex.value = page;

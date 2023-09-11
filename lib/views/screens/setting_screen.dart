@@ -32,19 +32,19 @@ class _SettingScreenState extends State<SettingScreen> {
         padding: EdgeInsets.only(top: 10),
         child: Column(
           children: [
-            GroupWidget(
-              title: 'App',
-              children: [
-                GroupItemWidget(
-                  icon: FontAwesomeIcons.boxesStacked,
-                  title: 'Subscriptions',
-                  onTab: () {
-                    //Get.to(() => SubscriptionScreen());
-                  },
-                  isBorderShow: false,
-                ),
-              ],
-            ),
+            // GroupWidget(
+            //   title: 'App',
+            //   children: [
+            //     GroupItemWidget(
+            //       icon: FontAwesomeIcons.boxesStacked,
+            //       title: 'Subscriptions',
+            //       onTab: () {
+            //         //Get.to(() => SubscriptionScreen());
+            //       },
+            //       isBorderShow: false,
+            //     ),
+            //   ],
+            // ),
             GroupWidget(
               title: 'Setting',
               children: [

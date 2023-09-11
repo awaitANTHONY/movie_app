@@ -29,6 +29,11 @@ class _MenuScreenState extends State<MenuScreen> {
             menu.tabs![0].provider == 'custom') {
           return SizedBox();
         }
+        if ((menu.tabs?.length ?? 0) > 0 &&
+            menu.tabs![0].provider == 'stream' &&
+            !settingController.enableDownload.value) {
+          return SizedBox();
+        }
         return Card(
           elevation: 1,
           shape: RoundedRectangleBorder(

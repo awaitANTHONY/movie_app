@@ -139,44 +139,51 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Html(
-                  data: widget.item.content!.rendered,
-                  style: {
-                    "*": Style(
-                      margin: Margins.all(0),
-                      padding:
-                          HtmlPaddings.all(0).copyWith(bottom: HtmlPadding(10)),
-                      lineHeight: const LineHeight(1.3),
-                      color: AppColors.text,
-                      fontSize: FontSize(AppSizes.size14),
-                      textAlign: TextAlign.justify,
-                    ),
-                    "a": Style(
-                      margin: Margins.all(0),
-                      padding:
-                          HtmlPaddings.all(0).copyWith(bottom: HtmlPadding(10)),
-                      lineHeight: const LineHeight(1.3),
-                      color: AppColors.primary,
-                      fontSize: FontSize(AppSizes.size14),
-                      textAlign: TextAlign.justify,
-                    ),
-                    'img': Style(
-                      display: Display.none,
-                      verticalAlign: VerticalAlign.baseline,
-                      width: Width(Get.width * .8),
-                      //height: ,
-                      textAlign: TextAlign.center,
-                      margin: Margins.all(0),
-                      padding:
-                          HtmlPaddings.all(0).copyWith(bottom: HtmlPadding(10)),
-                      alignment: Alignment.center,
-                      lineHeight: const LineHeight(1.3),
-                    ),
-                  },
-                  onLinkTap: (url, attributes, element) async {
-                    await launchURL(url);
-                  },
-                ),
+                child: Builder(builder: (context) {
+                  String data = widget.item.content!.rendered!;
+
+                  return Html(
+                    data: widget.item.content!.rendered,
+                    style: {
+                      "*": Style(
+                        margin: Margins.all(0),
+                        padding: HtmlPaddings.all(0)
+                            .copyWith(bottom: HtmlPadding(10)),
+                        lineHeight: const LineHeight(1.3),
+                        color: AppColors.text,
+                        fontSize: FontSize(AppSizes.size14),
+                        textAlign: TextAlign.justify,
+                      ),
+                      "a": Style(
+                        display: settingController.enableDownload.value
+                            ? Display.block
+                            : Display.none,
+                        margin: Margins.all(0),
+                        padding: HtmlPaddings.all(0)
+                            .copyWith(bottom: HtmlPadding(10)),
+                        lineHeight: const LineHeight(1.3),
+                        color: AppColors.primary,
+                        fontSize: FontSize(AppSizes.size14),
+                        textAlign: TextAlign.justify,
+                      ),
+                      'img': Style(
+                        display: Display.none,
+                        verticalAlign: VerticalAlign.baseline,
+                        width: Width(Get.width * .8),
+                        //height: ,
+                        textAlign: TextAlign.center,
+                        margin: Margins.all(0),
+                        padding: HtmlPaddings.all(0)
+                            .copyWith(bottom: HtmlPadding(10)),
+                        alignment: Alignment.center,
+                        lineHeight: const LineHeight(1.3),
+                      ),
+                    },
+                    onLinkTap: (url, attributes, element) async {
+                      await launchURL(url);
+                    },
+                  );
+                }),
               )
             ],
           ),
