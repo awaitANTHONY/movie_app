@@ -22,16 +22,16 @@ class NewsWidget extends StatelessWidget {
           'newsType': newsItem?.newsType ?? '',
         };
         // AdsService.showInterstitialAd(() {
-        //   Get.to(() => NewsDetailsScreen(arguments));
+        Get.to(() => NewsDetailsScreen(arguments));
         // });
       },
       child: Container(
         margin: const EdgeInsets.symmetric(
           vertical: 2,
-          horizontal: 3,
+          horizontal: 10,
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(0),
           color: AppColors.background2,
           // boxShadow: const [
           //   BoxShadow(
@@ -129,7 +129,7 @@ class NewsWidgetLarge extends StatelessWidget {
           'newsType': newsItem?.newsType ?? '',
         };
         // AdsService.showInterstitialAd(() {
-        //   Get.to(() => NewsDetailsScreen(arguments));
+        Get.to(() => NewsDetailsScreen(arguments));
         // });
       },
       child: Card(

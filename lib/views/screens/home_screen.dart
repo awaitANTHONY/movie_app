@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:movie_app/views/widgets/home_category_widget.dart';
 import 'package:movie_app/views/widgets/home_channel_widget.dart';
 import '/views/widgets/slider_widget.dart';
 
@@ -17,8 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          //SliderWidget(),
-          HomeCategoryWidget(),
+          SliderWidget(),
           HomeSliderWidget(),
         ],
       ),

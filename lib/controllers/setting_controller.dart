@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:movie_app/services/api_services.dart';
 import '/consts/consts.dart';
 import '/utils/helpers.dart';
@@ -28,8 +29,13 @@ class SettingController extends GetxController {
   RxInt sliderIndex = 0.obs;
   Rxn<PackageInfo> appInfo = Rxn<PackageInfo>().obs();
   RxInt selectedIndex = 0.obs;
+  RxInt currentIndex = 0.obs;
   RxBool isDarkMode = false.obs;
   RxBool isNotificationEnable = false.obs;
+  RxBool isVibrationEnable = false.obs;
+  RxBool isSubscribed = false.obs;
+
+  RxList<String> titles = ['Menu', 'Top', 'News', 'Settings', 'Home'].obs;
 
   onItemTapped(int index) async {
     selectedIndex.value = index;
@@ -176,6 +182,17 @@ class SettingController extends GetxController {
       await FirebaseMessaging.instance
           .unsubscribeFromTopic('high_importance_channel');
     }
+  }
+
+  changeVibrationStatus() async {
+    var box = GetStorage();
+    box.write('isVibrationEnable', !isVibrationEnable.value);
+    vibration();
+    isVibrationEnable.value = !isVibrationEnable.value;
+  }
+
+  vibration() {
+    if (isNotificationEnable.value) HapticFeedback.vibrate();
   }
 
   @override

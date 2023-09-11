@@ -57,6 +57,10 @@ dependencies:
   carousel_slider: ^4.2.1
   dots_indicator: ^3.0.0
   marquee: ^2.2.3
+  font_awesome_flutter: ^10.5.0
+  flutter_html: ^3.0.0-beta.2
+  flutter_inapp_purchase: ^5.4.2
+  pod_player: ^0.2.1
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +73,9 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   flutter_launcher_icons: ^0.13.1
+
+dependency_overrides:
+  http: ^1.1.0
 
 flutter_icons:
   android: "ic_launcher"

@@ -2,6 +2,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:movie_app/controllers/movie_controller.dart';
+import 'package:movie_app/views/screens/movie_details_screen.dart';
 import '/controllers/home_controller.dart';
 import '/consts/consts.dart';
 import '/utils/helpers.dart';
@@ -11,25 +13,37 @@ class SliderWidget extends StatelessWidget {
     super.key,
   });
 
-  final HomeController homeController = Get.find();
+  final MovieController movieController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      var sliders = movieController.sliders;
+      if (sliders.isEmpty) {
+        return Container(
+          height: AppSizes.newSize(25),
+          width: double.infinity,
+          alignment: Alignment.center,
+          child: CircularProgressIndicator(
+            color: AppColors.primary,
+          ),
+        );
+      }
+
       return Column(
         children: [
           CarouselSlider.builder(
-            itemCount: homeController.banners.length,
+            itemCount: sliders.length,
             itemBuilder: (context, index, realIndex) {
-              var item = homeController.banners[index];
+              var item = sliders[index];
               return InkWell(
                 onTap: () {
-                  //
+                  Get.to(() => MovieDetailsScreen(item));
                 },
                 child: Stack(
                   children: [
                     cachedNetworkImage(
-                      item.image!,
+                      item.eEmbedded?.wpFeaturedmedia?[0].sourceUrl ?? '',
                       width: double.infinity,
                       height: double.infinity,
                       fit: BoxFit.fill,
@@ -37,13 +51,14 @@ class SliderWidget extends StatelessWidget {
                     Container(
                       height: double.infinity,
                       width: double.infinity,
-                      color: Colors.black.withOpacity(0.3),
+                      color: Colors.black.withOpacity(0.1),
                     ),
                     Positioned(
                       left: 0,
                       right: 0,
                       bottom: 0,
                       child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
                         height: AppSizes.size30,
                         width: double.infinity,
                         alignment: Alignment.center,
@@ -52,17 +67,18 @@ class SliderWidget extends StatelessWidget {
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
                             colors: [
-                              Colors.black,
-                              Colors.transparent,
+                              Colors.black54,
+                              Colors.black38,
                             ],
                           ),
                         ),
                         child: Text(
-                          item.title!,
+                          item.title!.rendered!,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: AppSizes.size16,
                             color: Colors.white,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           textAlign: TextAlign.center,
                           maxLines: 1,
@@ -78,16 +94,16 @@ class SliderWidget extends StatelessWidget {
               height: AppSizes.newSize(25),
               viewportFraction: 1.0,
               onPageChanged: (int page, CarouselPageChangedReason reason) {
-                homeController.currentIndex.value = page;
+                settingController.currentIndex.value = page;
               },
             ),
           ),
-          if (homeController.banners.isNotEmpty)
+          if (sliders.isNotEmpty)
             Container(
               padding: const EdgeInsets.all(5),
               child: DotsIndicator(
-                dotsCount: homeController.banners.length,
-                position: homeController.currentIndex.value,
+                dotsCount: sliders.length,
+                position: settingController.currentIndex.value,
                 decorator: DotsDecorator(
                   activeColor: AppColors.primary,
                   color: AppColors.primary.withOpacity(0.5),
@@ -99,7 +115,7 @@ class SliderWidget extends StatelessWidget {
                   ),
                 ),
               ),
-            )
+            ),
         ],
       );
     });

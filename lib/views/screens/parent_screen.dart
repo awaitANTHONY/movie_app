@@ -5,8 +5,11 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:movie_app/views/screens/home_screen.dart';
 import 'package:movie_app/views/screens/news_screen.dart';
+import 'package:movie_app/views/widgets/drawer_widget.dart';
 import '/consts/consts.dart';
-import 'genre_screen.dart';
+import 'menu_screen.dart';
+import 'movie_screen.dart';
+import 'setting_screen.dart';
 
 class ParentScreen extends StatefulWidget {
   const ParentScreen({
@@ -37,12 +40,12 @@ class ParentScreenState extends State<ParentScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: AppColors.background,
-        title: Text(
-          AppTexts.appName,
-          style: TextStyle(
-              //fontFamily: GoogleFonts.carterOne().fontFamily,
-              ),
-        ),
+        title: Obx(() {
+          return Text(
+            settingController.titles[settingController.selectedIndex.value],
+            style: const TextStyle(),
+          );
+        }),
         centerTitle: true,
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: AppColors.background,
@@ -51,14 +54,15 @@ class ParentScreenState extends State<ParentScreen> {
         ),
       ),
       backgroundColor: AppColors.background,
+      drawer: const DrawerWidget(),
       body: Obx(() {
         return IndexedStack(
           index: settingController.selectedIndex.value,
-          children: [
-            GenreScreen(),
-            Container(),
+          children: const [
+            MenuScreen(),
+            MovieScreen(),
             NewsScreen(),
-            Container(),
+            SettingScreen(),
             HomeScreen(),
           ],
         );
@@ -84,7 +88,7 @@ class ParentScreenState extends State<ParentScreen> {
         return Container(
           color: AppColors.text.withOpacity(0.02),
           child: AnimatedBottomNavigationBar(
-            backgroundColor: Color.fromRGBO(18, 18, 18, 0.7),
+            backgroundColor: const Color.fromRGBO(18, 18, 18, 0.7),
             icons: const [
               AssetImage('assets/images/icons/mozy.png'),
               AssetImage('assets/images/icons/menu.png'),

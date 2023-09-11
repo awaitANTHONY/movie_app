@@ -12,11 +12,17 @@ class AppConsts {
 
   static const String home =
       "https://cloudi45.com/netninja2023/netninja_v2.json";
+
+  static const String topMovies = "https://netnaija.xyz/wp-json/wp/v2/posts";
+  static const String topSeries =
+      "https://series.netnaija.xyz/wp-json/wp/v2/posts";
+  static const String topNollywood =
+      "https://seriezloaded.ng/wp-json/wp/v2/posts";
+
   static const String genres =
       "/wp-json/streamit-api/api/v1/streamit/get-genre-by-type?type=movie&paged=1&posts_per_page=10";
   static const String genreMovies =
       "/wp-json/streamit-api/api/v1/streamit/get-list-by-genre?type=movie&genre=action&paged=1&posts_per_page=10";
-  static const String movies = "/wp-json/streamit-api/api/v1/movie/get_list";
   static const String movieDetails =
       "/wp-json/streamit-api/api/v1/movie/get-detail?movie_id=7230";
   static const String search =

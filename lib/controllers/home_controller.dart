@@ -17,32 +17,32 @@ class HomeController extends GetxController {
   loadHome() async {
     isLoading.value = true;
 
-    //try {
-    String url = AppConsts.home;
-    Map<String, String> headers = {
-      'X-API-KEY': AppConsts.apiKey,
-    };
+    try {
+      String url = AppConsts.home;
+      Map<String, String> headers = {
+        'X-API-KEY': AppConsts.apiKey,
+      };
 
-    var response = await ApiService.get(
-      url,
-      headers: headers,
-    );
+      var response = await ApiService.get(
+        url,
+        headers: headers,
+      );
 
-    var jsonString = response.body;
-    var responseModel = jsonDecode(jsonString);
-    if (response.statusCode == 200) {
-      menus.clear();
-      responseModel.forEach((element) {
-        menus.add(Menu.fromJson(element));
-      });
-    } else {
-      showToast('Unknown error.');
+      var jsonString = response.body;
+      var responseModel = jsonDecode(jsonString);
+      if (response.statusCode == 200) {
+        menus.clear();
+        responseModel.forEach((element) {
+          menus.add(Menu.fromJson(element));
+        });
+      } else {
+        showToast('Unknown error.');
+      }
+    } catch (e) {
+      //
+    } finally {
+      isLoading.value = false;
     }
-    // } catch (e) {
-    //   //
-    // } finally {
-    //   isLoading.value = false;
-    // }
   }
 
   @override

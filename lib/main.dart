@@ -4,11 +4,11 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:movie_app/controllers/home_controller.dart';
+import 'package:movie_app/controllers/movie_controller.dart';
 import 'package:movie_app/controllers/news_controller.dart';
 import '/consts/consts.dart';
 import '/controllers/setting_controller.dart';
 import '/views/screens/splash_screen.dart';
-import 'controllers/genre_controller.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +39,7 @@ main() async {
       onInit: () {
         Get.put(SettingController());
         Get.put(HomeController());
-        Get.put(GenreController());
+        Get.put(MovieController());
         Get.put(NewsController());
       },
       home: const MyApp(),

@@ -1,18 +1,21 @@
 import 'package:movie_app/controllers/home_controller.dart';
+import 'package:movie_app/models/home.dart';
+import 'package:movie_app/views/screens/all_screen.dart';
+import 'package:movie_app/views/screens/video_screen.dart';
 
 import '/consts/consts.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 //import 'webview_screen.dart';
 
-class GenreScreen extends StatefulWidget {
-  const GenreScreen({super.key});
+class MenuScreen extends StatefulWidget {
+  const MenuScreen({super.key});
 
   @override
-  State<GenreScreen> createState() => _GenreScreenState();
+  State<MenuScreen> createState() => _MenuScreenState();
 }
 
-class _GenreScreenState extends State<GenreScreen> {
+class _MenuScreenState extends State<MenuScreen> {
   HomeController homeController = Get.find();
   @override
   Widget build(BuildContext context) {
@@ -50,8 +53,8 @@ class _GenreScreenState extends State<GenreScreen> {
                   initiallyExpanded: true,
                   iconColor: AppColors.primary,
                   collapsedIconColor: AppColors.primary,
-                  backgroundColor: AppColors.background2,
-                  collapsedBackgroundColor: AppColors.background2,
+                  backgroundColor: Colors.black.withOpacity(0.9),
+                  collapsedBackgroundColor: Colors.black.withOpacity(0.9),
                   collapsedTextColor: AppColors.text,
                   textColor: AppColors.text,
                   childrenPadding: const EdgeInsets.only(
@@ -78,9 +81,8 @@ class _GenreScreenState extends State<GenreScreen> {
                       children: menu.tabs!
                           .map(
                             (e) => CustomListTIle(
-                              title: (e.title != '' ? e.title! : menu.title!)
-                                  .toUpperCase(),
-                              url: 'https://www.transunion.com',
+                              e: e,
+                              menu: menu,
                             ),
                           )
                           .toList(),
@@ -100,25 +102,31 @@ class _GenreScreenState extends State<GenreScreen> {
 class CustomListTIle extends StatelessWidget {
   const CustomListTIle({
     Key? key,
-    required this.title,
-    required this.url,
+    required this.e,
+    required this.menu,
   }) : super(key: key);
 
-  final String title;
-  final String url;
+  final Tabs e;
+  final Menu menu;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        Map arguments = {
-          'title': title,
-          'url': url,
-        };
+        // Map arguments = {
+        //   'title': title,
+        //   'url': url,
+        // };
         //Get.to(() => WebviewScreen(arguments));
+
+        if (e.provider == 'wordpress') {
+          Get.to(() => AllScreen(e.title!, e.arguments![0]));
+        } else if (e.provider == 'stream') {
+          Get.to(() => VideoScreen(e.arguments![0]));
+        }
       },
       title: Text(
-        title,
+        (e.title != '' ? e.title! : menu.title!).toUpperCase(),
         style: AppStyles.heading.copyWith(
           fontSize: AppSizes.size14,
           color: AppColors.text.withOpacity(0.7),

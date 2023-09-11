@@ -1,202 +1,199 @@
-// // ignore_for_file: avoid_function_literals_in_foreach_calls
+import 'dart:async';
+import 'dart:io';
+import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import '/controllers/subscription_controller.dart';
+import '/controllers/setting_controller.dart';
+import '/utils/helpers.dart';
 
-// import 'dart:async';
-// import 'dart:convert';
-// import 'dart:io';
+class InAppPurchaseService {
+  InAppPurchaseService._();
 
-// import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
-// import '/controllers/subscription_controller.dart';
-// import '/views/dialogs/no_restore_products.dart';
-// import 'package:get/get.dart';
-// import '/controllers/setting_controller.dart';
-// import '/utils/helpers.dart';
+  static int _numLoadAttempts = 3;
+  static SettingController settingController = Get.find();
+  static SubscriptionController subscriptionController = Get.find();
 
-// class InAppPurchaseService {
-//   InAppPurchaseService._();
+  static late StreamSubscription purchaseUpdatedSubscription;
+  static late StreamSubscription purchaseErrorSubscription;
+  static late StreamSubscription conectionSubscription;
 
-//   static int _numLoadAttempts = 3;
-//   static SettingController settingController = Get.find();
-//   static SubscriptionController subscriptionController = Get.find();
-//   static late StreamSubscription purchaseUpdatedSubscription;
-//   static late StreamSubscription purchaseErrorSubscription;
-//   static late StreamSubscription conectionSubscription;
+  static Future<void> init(List<String> productLists) async {
+    // prepare
+    var result = await FlutterInappPurchase.instance.initialize();
+    dd('result: $result');
 
-//   static Future<void> init() async {
-//     if (!Platform.isIOS) return;
-//     var result = await FlutterInappPurchase.instance.initialize();
-//     dd('result: $result');
-//     try {
-//       String msg = await FlutterInappPurchase.instance.consumeAll();
-//       dd('consumeAllItems: $msg');
-//     } catch (err) {
-//       dd('consumeAllItems error: $err');
-//     }
+    // refresh items for android
+    try {
+      String msg = await FlutterInappPurchase.instance.consumeAll();
+      dd('consumeAllItems: $msg');
+    } catch (err) {
+      dd('consumeAllItems error: $err');
+    }
 
-//     conectionSubscription =
-//         FlutterInappPurchase.connectionUpdated.listen((connected) {
-//       dd('connected: $connected');
-//     });
+    conectionSubscription =
+        FlutterInappPurchase.connectionUpdated.listen((connected) {
+      dd('connected: $connected');
+    });
 
-//     purchaseUpdatedSubscription =
-//         FlutterInappPurchase.purchaseUpdated.listen((purchasedItem) {
-//       _handlePurchaseUpdate(purchasedItem!);
-//     });
+    purchaseUpdatedSubscription =
+        FlutterInappPurchase.purchaseUpdated.listen((productItem) {
+      dd('purchase-updated: $productItem');
 
-//     purchaseErrorSubscription =
-//         FlutterInappPurchase.purchaseError.listen((purchaseError) {
-//       dd('purchase-error: $purchaseError');
+      var box = GetStorage();
+      box.write('inapp', productItem!.transactionReceipt);
 
-//       showToast(purchaseError?.message ?? '');
+      _handlePurchaseUpdate(productItem);
 
-//       subscriptionController.isLoading.value = false;
-//     });
-//   }
+      subscriptionController.onPurchase();
+    });
 
-//   static Future getProducts(List<String> productIds) async {
-//     List<IAPItem> items =
-//         await FlutterInappPurchase.instance.getSubscriptions(productIds);
-//     for (var item in items) {
-//       subscriptionController.products.add(item);
-//     }
+    purchaseErrorSubscription =
+        FlutterInappPurchase.purchaseError.listen((purchaseError) {
+      dd('purchase-error: $purchaseError');
 
-//     if (items.isEmpty && _numLoadAttempts > 0) {
-//       getProducts(productIds);
-//       _numLoadAttempts--;
-//     }
-//   }
+      showToast(purchaseError?.message ?? '');
 
-//   static requestPurchase(IAPItem item) {
-//     FlutterInappPurchase.instance.requestPurchase(item.productId!);
-//   }
+      subscriptionController.isloading.value = false;
+    });
 
-//   static requestRestore() async {
-//     try {
-//       List<PurchasedItem> purchasedItems =
-//           await FlutterInappPurchase.instance.getAvailablePurchases() ?? [];
+    await Future.delayed(2.seconds);
+    getProduct(productLists);
+  }
 
-//       for (var purchasedItem in purchasedItems) {
-//         bool isValid = false;
+  static Future getProduct(List<String> productLists) async {
+    List<IAPItem> items =
+        await FlutterInappPurchase.instance.getSubscriptions(productLists);
+    List<bool> status = [];
+    for (var item in items) {
+      subscriptionController.products.add(item);
+      try {
+        if (readStorage('isCheckRequired') ?? false) {
+          status.add(
+            await FlutterInappPurchase.instance.checkSubscribed(
+              sku: item.productId.toString(),
+            ),
+          );
+        }
+      } catch (e) {
+        showToast('Please signin apple id for Purchase history');
+      }
+    }
 
-//         if (Platform.isAndroid) {
-//           Map map = json.decode(purchasedItem.transactionReceipt!);
-//           if (!map['acknowledged']) {
-//             isValid = await _verifyPurchase(purchasedItem);
-//             if (isValid) {
-//               FlutterInappPurchase.instance.finishTransaction(purchasedItem);
-//               settingController.isSubscribed.value = true;
-//             }
-//           } else {
-//             settingController.isSubscribed.value = true;
-//           }
-//         }
-//       }
+    if (status.contains(true)) {
+      settingController.isSubscribed.value = true;
+    } else {
+      settingController.isSubscribed.value = false;
+    }
 
-//       if (purchasedItems.isEmpty) {
-//         noRestoreProductsDialog();
-//       } else {
-//         subscriptionController
-//             .subscriptionRestore(purchasedItems[0].productId!);
-//       }
-//     } catch (e) {
-//       subscriptionController.isLoading2.value = false;
-//     }
-//   }
+    dd(items.length);
+    dd(productLists);
 
-//   static void _handlePurchaseUpdate(PurchasedItem productItem) async {
-//     dd('purchase-updated: $productItem');
-//     if (Platform.isAndroid) {
-//       await _handlePurchaseUpdateAndroid(productItem);
-//     } else {
-//       await _handlePurchaseUpdateIOS(productItem);
-//     }
-//   }
+    var box = GetStorage();
+    bool isRestore = box.read('isRestore') ?? false;
 
-//   static Future<void> _handlePurchaseUpdateIOS(
-//       PurchasedItem purchasedItem) async {
-//     switch (purchasedItem.transactionStateIOS) {
-//       case TransactionState.deferred:
-//         break;
-//       case TransactionState.failed:
-//         showToast("Transaction Failed");
-//         FlutterInappPurchase.instance.finishTransaction(purchasedItem);
-//         break;
-//       case TransactionState.purchased:
-//         await _verifyAndFinishTransaction(purchasedItem);
-//         break;
-//       case TransactionState.purchasing:
-//         break;
-//       case TransactionState.restored:
-//         FlutterInappPurchase.instance.finishTransaction(purchasedItem);
-//         break;
-//       default:
-//     }
-//   }
+    if (isRestore) {
+      List<PurchasedItem> items2 =
+          await FlutterInappPurchase.instance.getAvailablePurchases() ?? [];
+      if (items2.isNotEmpty) {
+        settingController.isSubscribed.value = true;
+      }
+    }
 
-//   static Future<void> _handlePurchaseUpdateAndroid(
-//       PurchasedItem purchasedItem) async {
-//     switch (purchasedItem.purchaseStateAndroid) {
-//       case PurchaseState.purchased:
-//         if (!purchasedItem.isAcknowledgedAndroid!) {
-//           await _verifyAndFinishTransaction(purchasedItem);
-//         }
-//         break;
-//       case PurchaseState.pending:
-//         if (!purchasedItem.isAcknowledgedAndroid!) {
-//           await _verifyAndFinishTransaction(purchasedItem);
-//         }
-//         break;
-//       default:
-//         showToast("Transaction Failed");
-//     }
-//   }
+    if (items.isEmpty && _numLoadAttempts > 0) {
+      getProduct(productLists);
+      _numLoadAttempts--;
+    }
+  }
 
-//   static _verifyAndFinishTransaction(PurchasedItem purchasedItem) async {
-//     bool isValid = false;
-//     try {
-//       isValid = await _verifyPurchase(purchasedItem);
-//     } on Exception {
-//       showToast("Something went wrong");
-//       return;
-//     }
+  static requestPurchase(IAPItem item) {
+    FlutterInappPurchase.instance.requestPurchase(item.productId!);
+  }
 
-//     if (isValid) {
-//       FlutterInappPurchase.instance.finishTransaction(purchasedItem);
-//       subscriptionController.subscriptionUpdate(purchasedItem);
-//     } else {
-//       showToast("Varification failed");
-//     }
-//   }
+  static Future<List<PurchasedItem>> requestRestore() async {
+    try {
+      List<PurchasedItem> items =
+          await FlutterInappPurchase.instance.getAvailablePurchases() ?? [];
 
-//   static checkSubscribed(bool status) async {
-//     if (Platform.isIOS) {
-//       settingController.isSubscribed.value = status;
-//     } else {
-//       List<PurchasedItem>? purchasedItems =
-//           await FlutterInappPurchase.instance.getAvailablePurchases() ?? [];
+      if (items.isNotEmpty) {
+        settingController.isSubscribed.value = true;
+      } else {
+        settingController.isSubscribed.value = false;
+      }
 
-//       for (var purchasedItem in purchasedItems) {
-//         bool isValid = false;
+      return items;
+    } catch (e) {
+      subscriptionController.isloading2.value = false;
+      //showToast(e.toString());
+      return [];
+    }
+  }
 
-//         if (Platform.isAndroid) {
-//           Map map = json.decode(purchasedItem.transactionReceipt!);
-//           if (!map['acknowledged']) {
-//             isValid = await _verifyPurchase(purchasedItem);
-//             if (isValid) {
-//               FlutterInappPurchase.instance.finishTransaction(purchasedItem);
-//               settingController.isSubscribed.value = true;
-//             }
-//           } else {
-//             settingController.isSubscribed.value = true;
-//           }
-//           if (!settingController.isSubscribed.value) {
-//             subscriptionController.subscriptionExpired();
-//           }
-//         }
-//       }
-//     }
-//   }
+  static void _handlePurchaseUpdate(PurchasedItem productItem) async {
+    dd('purchase-updated: $productItem');
+    if (Platform.isAndroid) {
+      await _handlePurchaseUpdateAndroid(productItem);
+    } else {
+      await _handlePurchaseUpdateIOS(productItem);
+    }
+  }
 
-//   static Future<bool> _verifyPurchase(purchasedItem) {
-//     return Future.value(true);
-//   }
-// }
+  static Future<void> _handlePurchaseUpdateIOS(
+      PurchasedItem purchasedItem) async {
+    switch (purchasedItem.transactionStateIOS) {
+      case TransactionState.deferred:
+        break;
+      case TransactionState.failed:
+        showToast("Transaction Failed");
+        FlutterInappPurchase.instance.finishTransaction(purchasedItem);
+        break;
+      case TransactionState.purchased:
+        await _verifyAndFinishTransaction(purchasedItem);
+        break;
+      case TransactionState.purchasing:
+        break;
+      case TransactionState.restored:
+        FlutterInappPurchase.instance.finishTransaction(purchasedItem);
+        break;
+      default:
+    }
+  }
+
+  static Future<void> _handlePurchaseUpdateAndroid(
+      PurchasedItem purchasedItem) async {
+    switch (purchasedItem.purchaseStateAndroid) {
+      case PurchaseState.purchased:
+        if (!purchasedItem.isAcknowledgedAndroid!) {
+          await _verifyAndFinishTransaction(purchasedItem);
+        }
+        break;
+      case PurchaseState.pending:
+        if (!purchasedItem.isAcknowledgedAndroid!) {
+          await _verifyAndFinishTransaction(purchasedItem);
+        }
+        break;
+      default:
+        showToast("Transaction Failed");
+    }
+  }
+
+  static _verifyAndFinishTransaction(PurchasedItem purchasedItem) async {
+    bool isValid = false;
+    try {
+      isValid = await _verifyPurchase(purchasedItem);
+    } on Exception {
+      showToast("Something went wrong");
+      return;
+    }
+
+    if (isValid) {
+      FlutterInappPurchase.instance.finishTransaction(purchasedItem);
+    } else {
+      showToast("Varification failed");
+    }
+  }
+
+  static Future<bool> _verifyPurchase(purchasedItem) {
+    return Future.value(true);
+  }
+}

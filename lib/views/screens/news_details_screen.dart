@@ -38,7 +38,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primary,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -190,8 +190,12 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                         itemBuilder: (context, index) {
                           return Container(
                             margin: const EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 4),
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                              horizontal: 0,
+                              vertical: 4,
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                            ),
                             child: Text(
                               newsController
                                       .newsDetails.value.desc?[index].details ??
@@ -209,8 +213,10 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                     ],
                   ),
                 )
-              : const Center(
-                  child: CircularProgressIndicator(),
+              : Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.primary,
+                  ),
                 );
         },
       ),

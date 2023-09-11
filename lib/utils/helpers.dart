@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:get_storage/get_storage.dart';
 import '/consts/consts.dart';
+import 'dart:math' as math;
 
 getHeight(context, percentage) {
   double height = MediaQuery.of(context).size.height;
@@ -91,6 +92,10 @@ datePicker(
   }
 }
 
+double turnDegress(double degree) {
+  return degree * math.pi / 180;
+}
+
 Widget cachedNetworkImage(
   String imageUrl, {
   double? height = double.infinity,
@@ -118,6 +123,7 @@ Widget cachedNetworkImage(
     imageBuilder: imageBuilder,
     errorWidget: errorWidget ??
         (context, url, error) {
+          dd(url);
           return Center(
             child: Image.asset(
               'assets/images/default.png',
@@ -145,6 +151,19 @@ Widget cachedNetworkImage(
           );
         },
   );
+}
+
+String removeAllHtmlTags(String htmlText) {
+  RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
+
+  var text = htmlText
+      .replaceAll(exp, '')
+      .replaceAll('\n', '')
+      .replaceAll('&#8217;', '')
+      .replaceAll('&#8220;', '')
+      .replaceAll('&#8211;', '');
+
+  return text;
 }
 
 initNotification({required Null Function(RemoteMessage message) onOpen}) async {
