@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movie_app/controllers/movie_controller.dart';
 import 'package:movie_app/views/screens/movie_details_screen.dart';
-import '/controllers/home_controller.dart';
 import '/consts/consts.dart';
 import '/utils/helpers.dart';
 
