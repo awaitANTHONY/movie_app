@@ -163,6 +163,10 @@ String removeAllHtmlTags(String htmlText) {
       .replaceAll('&#8220;', '')
       .replaceAll('&#8211;', '');
 
+  if (!settingController.enableDownload.value) {
+    return text.replaceAll('Download', '').replaceAll('DOWNLOAD LINKS', '');
+  }
+
   return text;
 }
 

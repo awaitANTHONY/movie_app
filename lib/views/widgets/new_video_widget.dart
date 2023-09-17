@@ -23,7 +23,7 @@ class NewVideoWidget extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            height: AppSizes.newSize(22),
+            height: AppSizes.newSize(25),
             width: double.infinity,
             decoration: BoxDecoration(
               image: DecorationImage(

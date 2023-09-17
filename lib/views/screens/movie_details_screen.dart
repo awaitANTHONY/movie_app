@@ -28,7 +28,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
             ? SizedBox(
                 height: AppSizes.newSize(2),
                 child: Marquee(
-                  text: widget.item.title!.rendered!,
+                  text: removeAllHtmlTags(widget.item.title!.rendered!),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: AppSizes.size14,
@@ -47,7 +47,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                 ),
               )
             : Text(
-                widget.item.title!.rendered.toString(),
+                removeAllHtmlTags(widget.item.title!.rendered!),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: AppSizes.size14,
@@ -141,9 +141,14 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Builder(builder: (context) {
                   String data = widget.item.content!.rendered!;
+                  if (!settingController.enableDownload.value) {
+                    data = widget.item.content!.rendered!
+                        .replaceAll('Download', '')
+                        .replaceAll('DOWNLOAD LINKS', '');
+                  }
 
                   return Html(
-                    data: widget.item.content!.rendered,
+                    data: data,
                     style: {
                       "*": Style(
                         margin: Margins.all(0),
@@ -167,10 +172,10 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                         textAlign: TextAlign.justify,
                       ),
                       'img': Style(
-                        display: Display.none,
+                        // display: Display.none,
                         verticalAlign: VerticalAlign.baseline,
-                        width: Width(Get.width * .8),
-                        //height: ,
+                        width: Width(Get.width),
+                        height: Height(AppSizes.newSize(30)),
                         textAlign: TextAlign.center,
                         margin: Margins.all(0),
                         padding: HtmlPaddings.all(0)

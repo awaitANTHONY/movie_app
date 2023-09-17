@@ -21,7 +21,7 @@ class SliderWidget extends StatelessWidget {
       var sliders = movieController.sliders;
       if (sliders.isEmpty) {
         return Container(
-          height: AppSizes.newSize(25),
+          height: AppSizes.newSize(28),
           width: double.infinity,
           alignment: Alignment.center,
           child: CircularProgressIndicator(
@@ -91,7 +91,7 @@ class SliderWidget extends StatelessWidget {
             },
             options: CarouselOptions(
               autoPlay: true,
-              height: AppSizes.newSize(30),
+              height: AppSizes.newSize(34),
               viewportFraction: 1.0,
               onPageChanged: (int page, CarouselPageChangedReason reason) {
                 settingController.currentIndex.value = page;
