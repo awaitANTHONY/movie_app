@@ -2,7 +2,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:movie_app/utils/helpers.dart';
 import 'package:movie_app/views/screens/home_screen.dart';
 import 'package:movie_app/views/screens/news_screen.dart';
 import 'package:movie_app/views/widgets/drawer_widget.dart';
@@ -32,6 +32,10 @@ class ParentScreenState extends State<ParentScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       settingController.selectedIndex.value = widget.page;
     });
+
+    initNotification(
+      onOpen: (message) {},
+    );
   }
 
   @override

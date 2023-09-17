@@ -63,6 +63,7 @@ dependencies:
   pod_player: ^0.2.1
   google_mobile_ads: ^3.0.0
   easy_audience_network: ^0.0.6
+  flutter_animate: ^4.2.0+1
 
 dev_dependencies:
   flutter_test:
@@ -79,7 +80,7 @@ dev_dependencies:
 dependency_overrides:
   http: ^1.1.0
 
-flutter_icons:
+flutter_launcher_icons:
   android: "ic_launcher"
   ios: true
   remove_alpha_ios: true

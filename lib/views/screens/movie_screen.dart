@@ -1,10 +1,13 @@
+import 'dart:ui';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:movie_app/consts/consts.dart';
 import 'package:movie_app/controllers/movie_controller.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/utils/helpers.dart';
+import 'package:movie_app/views/widgets/new_video_widget.dart';
 import 'package:movie_app/views/widgets/video_widget.dart';
 
 import 'movie_details_screen.dart';
@@ -132,18 +135,20 @@ class _MovieScreenState extends State<MovieScreen>
               ),
             ],
           ),
+          2.0.spaceY,
           Obx(() {
             return Expanded(
               child: TabBarView(
                 controller: tabController,
                 children: [
                   ListView.separated(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     itemBuilder: (context, index) {
                       var item = movieController.topMovies[index];
-                      return index % 2 == 0
-                          ? VideoWidget(item: item)
-                          : VideoWidget2(item: item);
+                      return NewVideoWidget(item: item);
+                      // return index % 2 == 0
+                      //     ? VideoWidget(item: item)
+                      //     : VideoWidget2(item: item);
                     },
                     separatorBuilder: (context, index) {
                       return 10.0.spaceY;
@@ -155,9 +160,10 @@ class _MovieScreenState extends State<MovieScreen>
                     itemBuilder: (context, index) {
                       var item = movieController.topSeries[index];
 
-                      return index % 2 == 0
-                          ? VideoWidget(item: item)
-                          : VideoWidget2(item: item);
+                      return NewVideoWidget(item: item);
+                      // return index % 2 == 0
+                      //     ? VideoWidget(item: item)
+                      //     : VideoWidget2(item: item);
                     },
                     separatorBuilder: (context, index) {
                       return 10.0.spaceY;

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:movie_app/consts/consts.dart';
 import 'package:movie_app/models/movie.dart';
+import 'package:movie_app/views/widgets/new_video_widget.dart';
 import 'package:movie_app/views/widgets/video_widget.dart';
 
 class MoreScreen extends StatefulWidget {
@@ -35,18 +37,19 @@ class _MoreScreenState extends State<MoreScreen> {
         title: Text(widget.title),
         centerTitle: false,
       ),
-      body: ListView.separated(
-        padding: const EdgeInsets.all(10),
-        itemBuilder: (context, index) {
-          var item = widget.items[index];
-          return index % 2 == 0
-              ? VideoWidget(item: item)
-              : VideoWidget2(item: item);
-        },
-        separatorBuilder: (context, index) {
-          return 10.0.spaceY;
-        },
-        itemCount: widget.items.length,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            ...widget.items
+                .map((item) => Column(
+                      children: [
+                        NewVideoWidget(item: item),
+                        5.0.spaceY,
+                      ],
+                    ))
+                .toList()
+          ].animate(interval: 200.ms).fadeIn(duration: 300.ms).scaleX(),
+        ),
       ),
     );
   }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:movie_app/consts/consts.dart';
 import 'package:movie_app/controllers/movie_controller.dart';
+import 'package:movie_app/views/widgets/new_video_widget.dart';
 import 'package:movie_app/views/widgets/video_widget.dart';
 
 class AllScreen extends StatefulWidget {
@@ -67,19 +69,31 @@ class _AllScreenState extends State<AllScreen> {
             ),
           );
         }
-        return ListView.separated(
-          padding: const EdgeInsets.all(10),
-          itemBuilder: (context, index) {
-            var item = movieController.all[index];
-            return index % 2 == 0
-                ? VideoWidget(item: item)
-                : VideoWidget2(item: item);
-          },
-          separatorBuilder: (context, index) {
-            return 10.0.spaceY;
-          },
-          itemCount: movieController.all.length,
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              ...movieController.all
+                  .map((item) => Column(
+                        children: [
+                          NewVideoWidget(item: item),
+                          5.0.spaceY,
+                        ],
+                      ))
+                  .toList()
+            ].animate(interval: 200.ms).fadeIn(duration: 300.ms).scaleX(),
+          ),
         );
+        // return ListView.separated(
+        //   padding: const EdgeInsets.all(10),
+        //   itemBuilder: (context, index) {
+        //     var item = movieController.all[index];
+        //     return NewVideoWidget(item: item);
+        //   },
+        //   separatorBuilder: (context, index) {
+        //     return 10.0.spaceY;
+        //   },
+        //   itemCount: movieController.all.length,
+        // );
       }),
     );
   }

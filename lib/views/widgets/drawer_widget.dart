@@ -62,7 +62,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Image.asset(
-                            'assets/images/splash.png',
+                            'assets/images/logo.png',
                           ),
                         ),
                       ),
@@ -216,27 +216,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 ),
                 ListTile(
                   leading: const FaIcon(
-                    FontAwesomeIcons.info,
-                    color: AppColors.text,
-                  ),
-                  title: const Text(
-                    'About Us',
-                    style: TextStyle(
-                      color: AppColors.text,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    //Get.to(() => const AboutScreen());
-                  },
-                  trailing: Icon(
-                    Icons.arrow_forward_ios,
-                    color: AppColors.text.withOpacity(0.5),
-                    size: AppSizes.size20,
-                  ),
-                ),
-                ListTile(
-                  leading: const FaIcon(
                     FontAwesomeIcons.userShield,
                     color: AppColors.text,
                   ),
@@ -247,7 +226,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     ),
                   ),
                   onTap: () {
-                    launchURL('https://ratvnetwork.net/');
+                    launchURL(AppConsts.privacyPolice);
                   },
                   trailing: Icon(
                     Icons.arrow_forward_ios,
@@ -267,7 +246,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     ),
                   ),
                   onTap: () {
-                    launchURL('https://ratvnetwork.net/');
+                    launchURL(AppConsts.termsConditions);
                   },
                   trailing: Icon(
                     Icons.arrow_forward_ios,

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "292657004698",
+    "project_id": "netnaija-ios-2",
+    "storage_bucket": "netnaija-ios-2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:292657004698:android:b76810e24de5dfe1ba5f23",
+        "android_client_info": {
+          "package_name": "com.example.movie_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnHfgXuxW89pDV2tF43TX5NuxkiwOfLyM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

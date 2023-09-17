@@ -96,8 +96,8 @@ class _SettingScreenState extends State<SettingScreen> {
                       final box = context.findRenderObject() as RenderBox?;
 
                       await Share.share(
-                        'https://ratvnetwork.net/',
-                        subject: 'ratvnetwork',
+                        'https://apps.apple.com/us/app/netnaijapro-movies-show/id6466206817',
+                        subject: 'netnaijapro',
                         sharePositionOrigin:
                             box!.localToGlobal(Offset.zero) & box.size,
                       );
@@ -149,14 +149,14 @@ class _SettingScreenState extends State<SettingScreen> {
                   icon: FontAwesomeIcons.shield,
                   title: 'Privacy Policy',
                   onTab: () {
-                    launchURL('https://sites.google.com/view/comboscores/home');
+                    launchURL(AppConsts.privacyPolice);
                   },
                 ),
                 GroupItemWidget(
                   icon: FontAwesomeIcons.newspaper,
                   title: 'Terms and Conditions',
                   onTab: () {
-                    launchURL('https://sites.google.com/view/comboscores/home');
+                    launchURL(AppConsts.termsConditions);
                   },
                   isBorderShow: false,
                 ),

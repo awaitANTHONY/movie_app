@@ -33,4 +33,7 @@ class AppConsts {
       "2y10JIMbQjXaPQUFptyuutruBBlC4hwejuBp9Iaqteytrtr5";
   static const String latestNews = "/api/v1/news";
   static const String newsDetails = "/api/v1/news_details";
+
+  static const String privacyPolice = "$backendBaseUrl/privacy_policy";
+  static const String termsConditions = "$backendBaseUrl/terms_conditions";
 }
