@@ -38,7 +38,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       if (trailer != null) {
         controller = PodPlayerController(
           playVideoFrom: PlayVideoFrom.youtube(
-              "https://www.youtube.com/watch?v=${trailer!.videoId}"),
+            "https://www.youtube.com/watch?v=${trailer!.videoId}",
+          ),
           podPlayerConfig: const PodPlayerConfig(
             autoPlay: true,
             isLooping: true,
