@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marquee/marquee.dart';
 import 'package:movie_app/models/movie.dart';
+import 'package:pod_player/pod_player.dart';
+import 'package:youtube_data_api/models/video.dart';
+import 'package:youtube_data_api/youtube_data_api.dart';
 import '/utils/helpers.dart';
 import 'package:flutter_html/flutter_html.dart';
 import '/consts/consts.dart';
@@ -15,6 +18,45 @@ class MovieDetailsScreen extends StatefulWidget {
 }
 
 class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
+  late final PodPlayerController controller;
+  late String title;
+  Video? trailer;
+  bool isLoading = true;
+  @override
+  void initState() {
+    super.initState();
+
+    title = removeAllHtmlTags(widget.item.title!.rendered!);
+
+    Future.delayed(1.seconds, () async {
+      List<dynamic> list = await YoutubeDataApi().fetchSearchVideo(
+        title,
+        AppConsts.ytApiKey,
+      );
+
+      trailer = list.firstWhereOrNull((element) => element is Video);
+      if (trailer != null) {
+        controller = PodPlayerController(
+          playVideoFrom: PlayVideoFrom.youtube(
+              "https://www.youtube.com/watch?v=${trailer!.videoId}"),
+          podPlayerConfig: const PodPlayerConfig(
+            autoPlay: true,
+            isLooping: true,
+          ),
+        )..initialise();
+      }
+      isLoading = false;
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    controller.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,78 +103,126 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipPath(
-                //clipper: NewsContainerClipPath(),
-                child: cachedNetworkImage(
-                  widget.item.eEmbedded!.wpFeaturedmedia![0].sourceUrl!,
-                  height: AppSizes.newSize(25),
-                  width: double.infinity,
-                  imageBuilder: (context, imageProvider) => Container(
-                    height: AppSizes.newSize(25),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(5)),
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
-                  placeholder: (context, url) => Container(
-                    alignment: Alignment.center,
-                    height: double.infinity,
-                    width: double.infinity,
-                    child: SizedBox(
-                      height: AppSizes.newSize(4),
-                      width: AppSizes.newSize(4),
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                ),
-              ),
-              Transform.rotate(
-                angle: turnDegress(-1.5),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  width: Get.width,
-                  color: AppColors.background2,
-                  child: Transform.rotate(
-                    angle: turnDegress(1.5),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 10),
-                        Container(
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 4, horizontal: 4),
-                          child: Text(
-                            removeAllHtmlTags(widget.item.title!.rendered!),
-                            style: TextStyle(
-                              fontSize: AppSizes.size15,
-                              color: AppColors.text.withOpacity(.8),
-                              fontWeight: FontWeight.bold,
+              if (!isLoading)
+                if (trailer != null)
+                  AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: Stack(
+                      alignment: Alignment.bottomCenter,
+                      children: <Widget>[
+                        PodVideoPlayer(
+                          controller: controller,
+                          podProgressBarConfig: const PodProgressBarConfig(
+                            padding: EdgeInsets.only(
+                              bottom: 20,
+                              left: 20,
+                              right: 20,
                             ),
-                            textAlign: TextAlign.justify,
+                            playingBarColor: Colors.blue,
+                            circleHandlerColor: Colors.blue,
+                            backgroundColor: Colors.blueGrey,
+                          ),
+                          videoThumbnail: DecorationImage(
+                            image: NetworkImage(
+                              widget.item.eEmbedded?.wpFeaturedmedia?[0]
+                                      .sourceUrl ??
+                                  '',
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                          videoTitle: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            child: Text(
+                              trailer!.title!,
+                              style: TextStyle(
+                                color: AppColors.text,
+                                fontWeight: FontWeight.bold,
+                                overflow: TextOverflow.ellipsis,
+                                fontSize: AppSizes.size13,
+                              ),
+                              maxLines: 1,
+                              //textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 4, horizontal: 4),
-                          child: Text(
-                            widget.item.modified!,
-                            style: TextStyle(
-                              fontSize: AppSizes.size13,
-                              color: AppColors.text.withOpacity(.86),
-                              fontWeight: FontWeight.normal,
-                            ),
-                            textAlign: TextAlign.start,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
                       ],
                     ),
+                  )
+                else
+                  ClipPath(
+                    //clipper: NewsContainerClipPath(),
+                    child: cachedNetworkImage(
+                      widget.item.eEmbedded!.wpFeaturedmedia![0].sourceUrl!,
+                      height: AppSizes.newSize(25),
+                      width: double.infinity,
+                      imageBuilder: (context, imageProvider) => Container(
+                        height: AppSizes.newSize(25),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(5)),
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      ),
+                      placeholder: (context, url) => Container(
+                        alignment: Alignment.center,
+                        height: double.infinity,
+                        width: double.infinity,
+                        child: SizedBox(
+                          height: AppSizes.newSize(4),
+                          width: AppSizes.newSize(4),
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    ),
+                  )
+              else
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Center(
+                    child: CircularProgressIndicator(color: AppColors.primary),
                   ),
+                ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                width: Get.width,
+                color: AppColors.background2,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 4),
+                      child: Text(
+                        removeAllHtmlTags(widget.item.title!.rendered!),
+                        style: TextStyle(
+                          fontSize: AppSizes.size15,
+                          color: AppColors.text.withOpacity(.8),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.justify,
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 4),
+                      child: Text(
+                        widget.item.modified!,
+                        style: TextStyle(
+                          fontSize: AppSizes.size13,
+                          color: AppColors.text.withOpacity(.86),
+                          fontWeight: FontWeight.normal,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                  ],
                 ),
               ),
               const SizedBox(height: 20),

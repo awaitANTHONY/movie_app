@@ -3,6 +3,8 @@ class AppConsts {
       "https://wordpress.iqonic.design/product/wp/streamit";
   static const String apiKey = "";
 
+  static const String ytApiKey = "AIzaSyBy5FbTjGP_1mYVadI1rVifNLW3sVJFouA";
+
   static const String settings = "https://yacinetv.bediflex.com/movie.json";
 
   static const String signup = "/api/v1/signup";
