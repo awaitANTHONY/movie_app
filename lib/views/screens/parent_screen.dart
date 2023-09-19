@@ -47,7 +47,9 @@ class ParentScreenState extends State<ParentScreen> {
         title: Obx(() {
           return Text(
             settingController.titles[settingController.selectedIndex.value],
-            style: const TextStyle(),
+            style: const TextStyle(
+              color: AppColors.text2,
+            ),
           );
         }),
         centerTitle: true,

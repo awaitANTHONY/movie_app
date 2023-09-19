@@ -244,7 +244,7 @@ class GroupItemWidget extends StatelessWidget {
           children: [
             FaIcon(
               icon,
-              color: AppColors.text.withOpacity(0.7),
+              color: AppColors.text2.withOpacity(0.7),
               size: AppSizes.size20,
             ),
             15.0.spaceX,
@@ -254,7 +254,7 @@ class GroupItemWidget extends StatelessWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: AppSizes.size14,
-                  color: AppColors.text.withOpacity(0.7),
+                  color: AppColors.text2.withOpacity(0.7),
                 ),
                 textAlign: TextAlign.left,
               ),
@@ -262,7 +262,7 @@ class GroupItemWidget extends StatelessWidget {
             if (tile == null)
               FaIcon(
                 Icons.arrow_forward_ios_outlined,
-                color: AppColors.text.withOpacity(0.6),
+                color: AppColors.text2.withOpacity(0.6),
                 size: AppSizes.size18,
               )
             else

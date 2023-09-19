@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marquee/marquee.dart';
 import 'package:movie_app/models/movie.dart';
+import 'package:movie_app/services/tmdb_service.dart';
 import 'package:pod_player/pod_player.dart';
 import 'package:youtube_data_api/models/video.dart';
 import 'package:youtube_data_api/youtube_data_api.dart';
@@ -48,6 +49,19 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       }
       isLoading = false;
       setState(() {});
+    });
+
+    Future.delayed(0.seconds, () async {
+      dd('object');
+      var t = title
+          .replaceAll(RegExp(r"\D"), "")
+          .replaceAll('-', ' ')
+          .replaceAll(RegExp(r"\p{P}", unicode: true), "");
+      var movies = await TMDBService.search(t);
+
+      for (var movie in movies) {
+        print("${movie.title} - ${movie.voteAverage}");
+      }
     });
   }
 

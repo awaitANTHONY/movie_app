@@ -65,6 +65,7 @@ dependencies:
   easy_audience_network: ^0.0.6
   flutter_animate: ^4.2.0+1
   youtube_data_api: ^1.0.4
+  tmdb_dart: ^0.2.2
 
 dev_dependencies:
   flutter_test:

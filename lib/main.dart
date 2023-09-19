@@ -7,6 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:movie_app/controllers/home_controller.dart';
 import 'package:movie_app/controllers/movie_controller.dart';
 import 'package:movie_app/controllers/news_controller.dart';
+import 'package:movie_app/services/tmdb_service.dart';
+import 'package:tmdb_dart/tmdb_dart.dart';
 import '/consts/consts.dart';
 import '/controllers/setting_controller.dart';
 import '/views/screens/splash_screen.dart';
@@ -19,6 +21,8 @@ main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  TMDBService.init();
 
   runApp(
     GetMaterialApp(
