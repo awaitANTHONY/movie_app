@@ -20,7 +20,7 @@ class _NewsScreenState extends State<NewsScreen> {
       if (newsController.isLoading.value) {
         return const Center(child: CircularProgressIndicator());
       }
-      if ((newsController.news?.length ?? 0) == 0) {
+      if (newsController.news.isEmpty) {
         return SizedBox(
           height: AppSizes.newSize(60),
           child: Center(
@@ -36,18 +36,16 @@ class _NewsScreenState extends State<NewsScreen> {
         );
       }
       return RefreshIndicator(
-        onRefresh: () => newsController.loadFootballNews(),
+        onRefresh: () => newsController.loadNews(),
         child: ListView.builder(
-          itemCount: newsController.news?.length ?? 0,
+          itemCount: newsController.news.length,
           itemBuilder: (context, index) {
-            News? newsItem = newsController.news?[index];
-            if ((newsItem?.title ?? '').toLowerCase().contains("fifa")) {
+            NewsData? newsItem = newsController.news[index];
+            if ((newsItem.title ?? '').toLowerCase().contains("fifa")) {
               return const SizedBox();
             }
             if (index % 3 == 0) {
-              if ((newsItem?.description ?? '')
-                  .toLowerCase()
-                  .contains("fifa")) {
+              if ((newsItem.description ?? '').toLowerCase().contains("fifa")) {
                 return const SizedBox();
               } else {
                 return NewsWidgetLarge(newsItem);

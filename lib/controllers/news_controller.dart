@@ -11,37 +11,42 @@ import '/services/vpn_service.dart';
 import '/utils/helpers.dart';
 
 class NewsController extends GetxController {
-  RxList<News>? news = <News>[].obs;
+  RxList<NewsData> news = <NewsData>[].obs;
   Rx<NewsDtls> newsDetails = NewsDtls().obs;
 
   RxBool isLoading = true.obs;
   RxBool isLoading2 = true.obs;
 
   static var client = http.Client();
-  loadFootballNews() async {
+  loadNews() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     var vpnResult = await CheckVpnConnection.isVpnActive();
     if (connectivityResult != ConnectivityResult.none && !vpnResult) {
       try {
-        var response = await client.post(
-          Uri.parse(AppConsts.backendBaseUrl + AppConsts.latestNews),
-          headers: <String, String>{
-            'X-API-KEY': AppConsts.backendApiKey,
-          },
+        String url = '${AppConsts.backendBaseUrl}${AppConsts.movieNews}';
+        Map<String, String> headers = {
+          'X-API-KEY': AppConsts.backendApiKey,
+        };
+        var response = await ApiService.post(
+          url,
+          headers: headers,
         );
 
-        news!.clear();
-        news!.addAll(
-          FootballNews.fromJson(jsonDecode(response.body)).news!.toList(),
-        );
+        var jsonString = response.body;
+        var responseModel = News.fromJson(jsonDecode(jsonString));
+        if (response.statusCode == 200) {
+          news.value = responseModel.data!;
 
-        news!.removeWhere(
-          (element) =>
-              (element.title!.toLowerCase().contains('fifa') ||
-                  element.description!.toLowerCase().contains('fifa')) ||
-              (element.title!.toLowerCase().contains('fa cup') ||
-                  element.description!.toLowerCase().contains('fa cup')),
-        );
+          news.removeWhere(
+            (element) =>
+                (element.title!.toLowerCase().contains('fifa') ||
+                    element.description!.toLowerCase().contains('fifa')) ||
+                (element.title!.toLowerCase().contains('fa cup') ||
+                    element.description!.toLowerCase().contains('fa cup')),
+          );
+        } else {
+          showToast('Unknown error.');
+        }
       } catch (e, s) {
         dd(e);
         dd(s);
@@ -51,7 +56,7 @@ class NewsController extends GetxController {
     } else {
       showSnackBar(
         'No internet connection please try again!',
-        () => loadFootballNews(),
+        () => loadNews(),
         2,
       );
     }
@@ -96,6 +101,6 @@ class NewsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    loadFootballNews();
+    loadNews();
   }
 }

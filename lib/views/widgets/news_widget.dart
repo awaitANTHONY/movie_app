@@ -3,23 +3,21 @@ import 'package:get/get.dart';
 import '/utils/helpers.dart';
 import '/consts/consts.dart';
 import '/models/news.dart';
-import '/services/ads_service.dart';
 import '/views/screens/news_details_screen.dart';
 
 class NewsWidget extends StatelessWidget {
   const NewsWidget(this.newsItem, {Key? key}) : super(key: key);
-  final News? newsItem;
+  final NewsData newsItem;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         var arguments = {
-          'newsTitle': newsItem?.title ?? '',
-          'newsImage': newsItem?.image ?? '',
-          'newsTime': newsItem?.pubDate ?? '',
-          'newsURL': newsItem?.link ?? '',
-          'newsType': newsItem?.newsType ?? '',
+          'newsTitle': newsItem.title ?? '',
+          'newsImage': newsItem.image ?? '',
+          'newsTime': newsItem.date ?? '',
+          'newsURL': newsItem.link ?? '',
         };
         // AdsService.showInterstitialAd(() {
         Get.to(() => NewsDetailsScreen(arguments));
@@ -54,7 +52,7 @@ class NewsWidget extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: cachedNetworkImage(
-                  newsItem?.image ?? '',
+                  newsItem.image ?? '',
                   hide: false,
                   placeholder: (context, url) => Container(
                     width: double.infinity,
@@ -82,7 +80,7 @@ class NewsWidget extends StatelessWidget {
                   SizedBox(
                     height: AppSizes.newSize(9.0),
                     child: Text(
-                      newsItem?.title ?? '',
+                      newsItem.title ?? '',
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: AppSizes.size14,
@@ -96,7 +94,7 @@ class NewsWidget extends StatelessWidget {
                     alignment: Alignment.bottomLeft,
                     height: AppSizes.newSize(3.2),
                     child: Text(
-                      newsItem?.pubDate ?? '',
+                      newsItem.date ?? '',
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
                         color: AppColors.text.withOpacity(.6),
@@ -116,17 +114,16 @@ class NewsWidget extends StatelessWidget {
 
 class NewsWidgetLarge extends StatelessWidget {
   const NewsWidgetLarge(this.newsItem, {Key? key}) : super(key: key);
-  final News? newsItem;
+  final NewsData newsItem;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         var arguments = {
-          'newsTitle': newsItem?.title ?? '',
-          'newsImage': newsItem?.image ?? '',
-          'newsTime': newsItem?.pubDate ?? '',
-          'newsURL': newsItem?.link ?? '',
-          'newsType': newsItem?.newsType ?? '',
+          'newsTitle': newsItem.title ?? '',
+          'newsImage': newsItem.image ?? '',
+          'newsTime': newsItem.date ?? '',
+          'newsURL': newsItem.link ?? '',
         };
         // AdsService.showInterstitialAd(() {
         Get.to(() => NewsDetailsScreen(arguments));
@@ -144,7 +141,7 @@ class NewsWidgetLarge extends StatelessWidget {
                 topRight: Radius.circular(4),
               ),
               child: cachedNetworkImage(
-                newsItem?.image ?? '',
+                newsItem.image ?? '',
                 hide: false,
                 placeholder: (context, url) => Container(
                   width: double.infinity,
@@ -168,7 +165,7 @@ class NewsWidgetLarge extends StatelessWidget {
                   Container(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      newsItem?.title ?? '',
+                      newsItem.title ?? '',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: AppSizes.size14,
@@ -181,7 +178,7 @@ class NewsWidgetLarge extends StatelessWidget {
                   Container(
                     alignment: Alignment.bottomLeft,
                     child: Text(
-                      newsItem?.description ?? '',
+                      newsItem.description ?? '',
                       maxLines: 3,
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
@@ -194,7 +191,7 @@ class NewsWidgetLarge extends StatelessWidget {
                     alignment: Alignment.bottomRight,
                     height: AppSizes.newSize(3.2),
                     child: Text(
-                      newsItem?.pubDate ?? '',
+                      newsItem.date ?? '',
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
                         color: AppColors.text.withOpacity(.6),

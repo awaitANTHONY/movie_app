@@ -1,59 +1,53 @@
-class FootballNews {
-  List<News>? news;
+class News {
+  bool? status;
+  List<NewsData>? data;
 
-  FootballNews({this.news});
+  News({this.status, this.data});
 
-  FootballNews.fromJson(Map<String, dynamic> json) {
-    if (json['news'] != null) {
-      news = <News>[];
-      json['news'].forEach((v) {
-        news!.add(News.fromJson(v));
+  News.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    if (json['data'] != null) {
+      data = <NewsData>[];
+      json['data'].forEach((v) {
+        data!.add(NewsData.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (news != null) {
-      data['news'] = news!.map((v) => v.toJson()).toList();
+    data['status'] = status;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class News {
+class NewsData {
   String? title;
   String? link;
+  String? date;
   String? description;
-  String? pubDate;
   String? image;
-  String? newsType;
 
-  News(
-      {this.title,
-      this.link,
-      this.description,
-      this.pubDate,
-      this.image,
-      this.newsType});
+  NewsData({this.title, this.link, this.date, this.description, this.image});
 
-  News.fromJson(Map<String, dynamic> json) {
+  NewsData.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     link = json['link'];
+    date = json['date'];
     description = json['description'];
-    pubDate = json['pubDate'];
     image = json['image'];
-    newsType = json['news_type'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['title'] = title;
     data['link'] = link;
+    data['date'] = date;
     data['description'] = description;
-    data['pubDate'] = pubDate;
     data['image'] = image;
-    data['news_type'] = newsType;
     return data;
   }
 }

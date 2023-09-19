@@ -33,7 +33,7 @@ class AppConsts {
   static const String backendBaseUrl = 'https://yacinetv.bediflex.com';
   static const String backendApiKey =
       "2y10JIMbQjXaPQUFptyuutruBBlC4hwejuBp9Iaqteytrtr5";
-  static const String latestNews = "/api/v1/news";
+  static const String movieNews = "/api/v1/movie_news";
   static const String newsDetails = "/api/v1/news_details";
 
   static const String privacyPolice = "$backendBaseUrl/privacy_policy";
