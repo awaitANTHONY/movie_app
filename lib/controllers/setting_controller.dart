@@ -34,7 +34,7 @@ class SettingController extends GetxController {
   RxBool isSubscribed = false.obs;
   RxBool enableDownload = true.obs;
 
-  RxList<String> titles = ['Menu', 'Top', 'News', 'Settings', 'Home'].obs;
+  RxList<String> titles = ['Home', 'Menu', 'Top', 'News', 'Settings'].obs;
 
   onItemTapped(int index) async {
     selectedIndex.value = index;
@@ -59,7 +59,7 @@ class SettingController extends GetxController {
         if (responseModel.status == true) {
           store(responseModel);
           await Future.delayed(3.seconds);
-          Get.offAll(() => const ParentScreen(page: 4));
+          Get.offAll(() => const ParentScreen(page: 0));
         } else {
           showSnackBar('Server Error! Please Try again.');
         }

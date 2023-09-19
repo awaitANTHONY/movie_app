@@ -1,4 +1,3 @@
-import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -6,6 +5,7 @@ import 'package:movie_app/utils/helpers.dart';
 import 'package:movie_app/views/screens/home_screen.dart';
 import 'package:movie_app/views/screens/news_screen.dart';
 import 'package:movie_app/views/widgets/drawer_widget.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import '/consts/consts.dart';
 import 'menu_screen.dart';
 import 'movie_screen.dart';
@@ -55,8 +55,8 @@ class ParentScreenState extends State<ParentScreen> {
         centerTitle: true,
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: AppColors.background,
-          statusBarIconBrightness: Brightness.light,
-          statusBarBrightness: Brightness.dark,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
         ),
       ),
       backgroundColor: AppColors.background,
@@ -65,50 +65,81 @@ class ParentScreenState extends State<ParentScreen> {
         return IndexedStack(
           index: settingController.selectedIndex.value,
           children: const [
+            HomeScreen(),
             MenuScreen(),
             MovieScreen(),
             NewsScreen(),
             SettingScreen(),
-            HomeScreen(),
           ],
         );
       }),
-      floatingActionButton: Obx(() {
-        return FloatingActionButton(
-          heroTag: 'home',
-          backgroundColor: Colors.white,
-          child: ImageIcon(
-            const AssetImage('assets/images/icons/home1.png'),
-            size: AppSizes.size20,
-            color: settingController.selectedIndex.value == 4
-                ? AppColors.primary
-                : AppColors.text2,
-          ),
-          onPressed: () {
-            settingController.onItemTapped(4);
-          },
-        );
-      }),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: Obx(() {
-        return Container(
-          color: AppColors.text.withOpacity(0.02),
-          child: AnimatedBottomNavigationBar(
-            backgroundColor: const Color.fromRGBO(18, 18, 18, 0.7),
-            icons: const [
-              AssetImage('assets/images/icons/mozy.png'),
-              AssetImage('assets/images/icons/menu.png'),
-              AssetImage('assets/images/icons/news.png'),
-              AssetImage('assets/images/icons/user.png'),
-            ],
-            iconSize: AppSizes.size20,
-            activeIndex: settingController.selectedIndex.value,
-            activeColor: AppColors.primary,
-            gapLocation: GapLocation.center,
-            inactiveColor: AppColors.text,
-            notchSmoothness: NotchSmoothness.smoothEdge,
-            onTap: settingController.onItemTapped,
-          ),
+        return SalomonBottomBar(
+          selectedItemColor: AppColors.primary,
+          currentIndex: settingController.selectedIndex.value,
+          onTap: settingController.onItemTapped,
+          items: [
+            SalomonBottomBarItem(
+              icon: ImageIcon(
+                const AssetImage('assets/images/icons/home1.png'),
+                size: AppSizes.size16,
+              ),
+              title: Text(
+                "Home",
+                style: TextStyle(
+                  fontSize: AppSizes.size12,
+                ),
+              ),
+            ),
+            SalomonBottomBarItem(
+              icon: ImageIcon(
+                const AssetImage('assets/images/icons/menu.png'),
+                size: AppSizes.size16,
+              ),
+              title: Text(
+                "Menus",
+                style: TextStyle(
+                  fontSize: AppSizes.size12,
+                ),
+              ),
+            ),
+            SalomonBottomBarItem(
+              icon: ImageIcon(
+                const AssetImage('assets/images/icons/mozy.png'),
+                size: AppSizes.size16,
+              ),
+              title: Text(
+                "Top",
+                style: TextStyle(
+                  fontSize: AppSizes.size12,
+                ),
+              ),
+            ),
+            SalomonBottomBarItem(
+              icon: ImageIcon(
+                const AssetImage('assets/images/icons/news.png'),
+                size: AppSizes.size16,
+              ),
+              title: Text(
+                "News",
+                style: TextStyle(
+                  fontSize: AppSizes.size12,
+                ),
+              ),
+            ),
+            SalomonBottomBarItem(
+              icon: ImageIcon(
+                const AssetImage('assets/images/icons/user.png'),
+                size: AppSizes.size16,
+              ),
+              title: Text(
+                "Profile",
+                style: TextStyle(
+                  fontSize: AppSizes.size12,
+                ),
+              ),
+            ),
+          ],
         );
       }),
     );

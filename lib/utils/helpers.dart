@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -168,6 +170,10 @@ String removeAllHtmlTags(String htmlText) {
   }
 
   return text;
+}
+
+double random(double min, double max) {
+  return min + Random().nextDouble() * (max - min);
 }
 
 initNotification({required Null Function(RemoteMessage message) onOpen}) async {

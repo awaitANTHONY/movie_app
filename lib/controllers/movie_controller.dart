@@ -68,6 +68,7 @@ class MovieController extends GetxController {
 
         sliders.value = [...topMovies, ...topSeries];
         sliders.shuffle();
+        sliders.shuffle();
         sliders.value = sliders.take(10).toList();
         latest.value = [...topMovies, ...topSeries];
         latest.shuffle();

@@ -39,59 +39,67 @@ class SliderWidget extends StatelessWidget {
                 onTap: () {
                   Get.to(() => MovieDetailsScreen(item));
                 },
-                child: Stack(
-                  children: [
-                    cachedNetworkImage(
-                      item.eEmbedded?.wpFeaturedmedia?[0].sourceUrl ?? '',
-                      width: double.infinity,
-                      height: double.infinity,
-                      fit: BoxFit.fill,
-                    ),
-                    Container(
-                      height: double.infinity,
-                      width: double.infinity,
-                      color: Colors.black.withOpacity(0.1),
-                    ),
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        height: AppSizes.size30,
-                        width: double.infinity,
-                        alignment: Alignment.center,
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: [
-                              Colors.black54,
-                              Colors.black38,
-                            ],
-                          ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Stack(
+                      children: [
+                        cachedNetworkImage(
+                          item.eEmbedded?.wpFeaturedmedia?[0].sourceUrl ?? '',
+                          width: double.infinity,
+                          height: double.infinity,
+                          fit: BoxFit.fill,
                         ),
-                        child: Text(
-                          item.title!.rendered!,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: AppSizes.size16,
-                            color: Colors.white,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          textAlign: TextAlign.center,
-                          maxLines: 1,
+                        Container(
+                          height: double.infinity,
+                          width: double.infinity,
+                          color: Colors.black.withOpacity(0.1),
                         ),
-                      ),
-                    )
-                  ],
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            height: AppSizes.size30,
+                            width: double.infinity,
+                            alignment: Alignment.center,
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                                colors: [
+                                  Colors.black54,
+                                  Colors.black38,
+                                ],
+                              ),
+                            ),
+                            child: Text(
+                              item.title!.rendered!,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: AppSizes.size16,
+                                color: Colors.white,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
               );
             },
             options: CarouselOptions(
               autoPlay: true,
-              height: AppSizes.newSize(34),
-              viewportFraction: 1.0,
+              enlargeCenterPage: true,
+              enlargeFactor: 0.2,
+              height: AppSizes.newSize(22),
+              viewportFraction: 0.8,
               onPageChanged: (int page, CarouselPageChangedReason reason) {
                 settingController.currentIndex.value = page;
               },

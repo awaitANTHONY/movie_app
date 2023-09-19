@@ -21,7 +21,11 @@ class _MenuScreenState extends State<MenuScreen> {
   Widget build(BuildContext context) {
     return ListView.separated(
       itemCount: homeController.menus.length,
-      padding: const EdgeInsets.only(top: 5),
+      padding: const EdgeInsets.only(
+        top: 5,
+        left: 10,
+        right: 10,
+      ),
       itemBuilder: (context, index) {
         var menu = homeController.menus[index];
 
@@ -34,68 +38,53 @@ class _MenuScreenState extends State<MenuScreen> {
             !settingController.enableDownload.value) {
           return SizedBox();
         }
-        return Card(
-          elevation: 1,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 7),
-          child: Theme(
-            data: Theme.of(context).copyWith(
-              dividerColor: Colors.transparent,
-              colorScheme: ColorScheme.fromSwatch().copyWith(
-                secondary: Colors.black,
-              ),
+
+        return Container(
+          decoration: BoxDecoration(
+            color: AppColors.background2.withOpacity(0.0),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: AppColors.border,
+              width: 0.5,
             ),
-            child: ListTileTheme(
-              dense: true,
-              minVerticalPadding: 0,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(0),
-                child: ExpansionTile(
-                  initiallyExpanded: true,
-                  iconColor: AppColors.primary,
-                  collapsedIconColor: AppColors.primary,
-                  backgroundColor: Colors.black.withOpacity(0.9),
-                  collapsedBackgroundColor: Colors.black.withOpacity(0.9),
-                  collapsedTextColor: AppColors.text,
-                  textColor: AppColors.text,
-                  childrenPadding: const EdgeInsets.only(
-                    bottom: 8.0,
-                    left: 5.0,
-                    right: 5.0,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 12,
+                ),
+                child: Text(
+                  menu.title!.toUpperCase(),
+                  style: AppStyles.heading.copyWith(
+                    fontSize: AppSizes.size16,
+                    color: AppColors.text2,
                   ),
-                  title: Text(
-                    menu.title!.toUpperCase(),
-                    style: AppStyles.heading.copyWith(
-                      fontSize: AppSizes.size16,
-                      color: AppColors.text,
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                  subtitle: Text(menu.submenu!),
-                  children: <Widget>[
-                    Container(
-                      width: double.infinity,
-                      height: 0.5,
-                      color: AppColors.border,
-                    ),
-                    Column(
-                      children: menu.tabs!
-                          .map(
-                            (e) => CustomListTIle(
-                              e: e,
-                              menu: menu,
-                            ),
-                          )
-                          .toList(),
-                    ),
-                  ],
+                  textAlign: TextAlign.left,
                 ),
               ),
-            ),
+              Divider(
+                color: AppColors.border,
+                height: 0.5,
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                ),
+                child: Column(
+                  children: menu.tabs!.map((e) {
+                    int index = menu.tabs!.indexOf(e);
+                    return CustomListTIle(
+                      e: e,
+                      menu: menu,
+                      hasBorder: index != (menu.tabs!.length - 1),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
           ),
         );
       },
@@ -105,43 +94,54 @@ class _MenuScreenState extends State<MenuScreen> {
 }
 
 class CustomListTIle extends StatelessWidget {
-  const CustomListTIle({
-    Key? key,
-    required this.e,
-    required this.menu,
-  }) : super(key: key);
+  const CustomListTIle(
+      {Key? key, required this.e, required this.menu, required this.hasBorder})
+      : super(key: key);
 
   final Tabs e;
   final Menu menu;
+  final bool hasBorder;
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return InkWell(
       onTap: () {
-        // Map arguments = {
-        //   'title': title,
-        //   'url': url,
-        // };
-        //Get.to(() => WebviewScreen(arguments));
-
         if (e.provider == 'wordpress') {
           Get.to(() => AllScreen(e.title!, e.arguments![0]));
         } else if (e.provider == 'stream') {
           Get.to(() => VideoScreen(e.arguments![0]));
         }
       },
-      title: Text(
-        (e.title != '' ? e.title! : menu.title!).toUpperCase(),
-        style: AppStyles.heading.copyWith(
-          fontSize: AppSizes.size14,
-          color: AppColors.text.withOpacity(0.7),
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          vertical: 15,
+          horizontal: 5,
         ),
-        textAlign: TextAlign.left,
-      ),
-      trailing: Icon(
-        Icons.arrow_forward_ios,
-        size: AppSizes.size18,
-        color: AppColors.primary,
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: hasBorder
+                ? BorderSide(color: AppColors.border, width: 0.5)
+                : BorderSide.none,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              (e.title != '' ? e.title! : menu.title!).toUpperCase(),
+              style: AppStyles.text.copyWith(
+                fontSize: AppSizes.size13,
+                color: AppColors.text2.withOpacity(0.8),
+              ),
+              textAlign: TextAlign.left,
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              size: AppSizes.size18,
+              color: AppColors.primary,
+            )
+          ],
+        ),
       ),
     );
   }

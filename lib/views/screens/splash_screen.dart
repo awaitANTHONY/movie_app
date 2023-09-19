@@ -18,8 +18,8 @@ class SplashScreenState extends State<SplashScreen> {
         elevation: 0,
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: AppColors.background,
-          statusBarIconBrightness: Brightness.light,
-          statusBarBrightness: Brightness.dark,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
         ),
       ),
       backgroundColor: AppColors.background,
@@ -34,9 +34,12 @@ class SplashScreenState extends State<SplashScreen> {
               flex: 9,
               child: Container(
                 alignment: Alignment.center,
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  height: 180,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    height: 180,
+                  ),
                 ),
               ),
             ),
