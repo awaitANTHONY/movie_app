@@ -1,17 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:marquee/marquee.dart';
-
-import '/services/ads_service.dart';
+import 'package:movie_app/controllers/news_controller.dart';
+import 'package:movie_app/models/news.dart';
 import '/utils/helpers.dart';
+import 'package:flutter_html/flutter_html.dart';
 import '/consts/consts.dart';
-import '/controllers/news_controller.dart';
-import '/controllers/setting_controller.dart';
 
 class NewsDetailsScreen extends StatefulWidget {
-  final Map arguments;
-  const NewsDetailsScreen(this.arguments, {Key? key}) : super(key: key);
+  final NewsData item;
+  const NewsDetailsScreen(this.item, {Key? key}) : super(key: key);
 
   @override
   State<NewsDetailsScreen> createState() => _NewsDetailsScreenState();
@@ -19,15 +19,9 @@ class NewsDetailsScreen extends StatefulWidget {
 
 class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   NewsController newsController = Get.find();
-  SettingController settingsController = Get.find();
-
   @override
   void initState() {
     super.initState();
-    newsController.loadNewsDetails(
-      widget.arguments['newsURL'],
-      widget.arguments['newsType'],
-    );
   }
 
   @override
@@ -49,20 +43,25 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
             onTap: () => Get.back(),
             child: const Icon(
               Icons.arrow_back_rounded,
-              color: Colors.white,
+              color: AppColors.text2,
             ),
           ),
         ),
         centerTitle: false,
-        title: widget.arguments['newsTitle'].length > 25
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: AppColors.background,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
+        ),
+        title: widget.item.title!.length > 25
             ? SizedBox(
                 height: AppSizes.newSize(2),
                 child: Marquee(
-                  text: widget.arguments['newsTitle'],
+                  text: widget.item.title!,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: AppSizes.size14,
-                    color: Colors.white,
+                    color: AppColors.text2,
                   ),
                   scrollAxis: Axis.horizontal,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,150 +76,133 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                 ),
               )
             : Text(
-                widget.arguments['newsTitle'].toString(),
+                widget.item.title.toString(),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: AppSizes.size14,
-                  color: Colors.white,
+                  color: AppColors.text2,
                 ),
               ),
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          statusBarIconBrightness: Theme.of(context)
-              .appBarTheme
-              .systemOverlayStyle
-              ?.statusBarIconBrightness,
-          statusBarBrightness: Theme.of(context)
-              .appBarTheme
-              .systemOverlayStyle
-              ?.statusBarBrightness,
+      ),
+      body: Container(
+        margin: const EdgeInsets.all(0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CachedNetworkImage(
+                imageUrl: widget.item.image ?? '',
+                height: AppSizes.newSize(25),
+                width: double.infinity,
+                imageBuilder: (context, imageProvider) => Container(
+                  height: AppSizes.newSize(25),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    //borderRadius: const BorderRadius.all(Radius.circular(5)),
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+                errorWidget: (context, url, error) {
+                  var item = newsController.news!
+                      .where((element) => element.image != null)
+                      .lastOrNull;
+                  return cachedNetworkImage(
+                    item?.image ?? '',
+                    height: AppSizes.newSize(22),
+                    width: Get.width,
+                    fit: BoxFit.fill,
+                  );
+                },
+                placeholder: (context, url) => Container(
+                  alignment: Alignment.center,
+                  height: double.infinity,
+                  width: double.infinity,
+                  child: SizedBox(
+                    height: AppSizes.newSize(4),
+                    width: AppSizes.newSize(4),
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                width: Get.width,
+                color: AppColors.primary,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 4),
+                      child: Text(
+                        removeAllHtmlTags(widget.item.title!),
+                        style: TextStyle(
+                          fontSize: AppSizes.size15,
+                          color: AppColors.text.withOpacity(.8),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.justify,
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 4),
+                      child: Text(
+                        widget.item.date!,
+                        style: TextStyle(
+                          fontSize: AppSizes.size13,
+                          color: AppColors.text.withOpacity(.86),
+                          fontWeight: FontWeight.normal,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Html(
+                  data: widget.item.description!,
+                  style: {
+                    "*": Style(
+                      margin: Margins.all(0),
+                      padding:
+                          HtmlPaddings.all(0).copyWith(bottom: HtmlPadding(10)),
+                      lineHeight: const LineHeight(1.3),
+                      color: AppColors.text2,
+                      fontSize: FontSize(AppSizes.size14),
+                      textAlign: TextAlign.justify,
+                    ),
+                    'img': Style(
+                      display: Display.listItem,
+                      verticalAlign: VerticalAlign.baseline,
+                      width: Width(Get.width * .8),
+                      textAlign: TextAlign.center,
+                      margin: Margins.all(0),
+                      padding:
+                          HtmlPaddings.all(0).copyWith(bottom: HtmlPadding(10)),
+                      alignment: Alignment.center,
+                      lineHeight: const LineHeight(1.3),
+                    ),
+                  },
+                  onLinkTap: (url, attributes, element) async {
+                    await launchURL(url);
+                  },
+                ),
+              )
+            ],
+          ),
         ),
       ),
-      //  backgroundColor: AppColors.screenBg,
-      body: Obx(
-        () {
-          return !newsController.isLoading2.value
-              ? Container(
-                  color: AppColors.background2,
-                  margin: const EdgeInsets.all(0),
-                  child: ListView(
-                    children: [
-                      cachedNetworkImage(
-                        widget.arguments['newsImage'],
-                        height: AppSizes.newSize(25),
-                        width: double.infinity,
-                        imageBuilder: (context, imageProvider) => Container(
-                          height: AppSizes.newSize(25),
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(5)),
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                        errorWidget: (context, url, error) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.grey[300],
-                            ),
-                            child: Image.asset(AppAssets.team),
-                          );
-                        },
-                        placeholder: (context, url) => Container(
-                          alignment: Alignment.center,
-                          height: double.infinity,
-                          width: double.infinity,
-                          child: SizedBox(
-                            height: AppSizes.newSize(4),
-                            width: AppSizes.newSize(4),
-                            child: Image.asset(AppAssets.loading),
-                          ),
-                        ),
-                        hide: false,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        width: Get.width,
-                        color: Theme.of(context).cardTheme.color,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 10),
-                            Container(
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 4, horizontal: 4),
-                              child: Text(
-                                widget.arguments['newsTitle'],
-                                style: TextStyle(
-                                  fontSize: AppSizes.size15,
-                                  color: AppColors.text.withOpacity(.8),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                textAlign: TextAlign.justify,
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 4, horizontal: 4),
-                              child: Text(
-                                widget.arguments['newsTime'],
-                                style: TextStyle(
-                                  fontSize: AppSizes.size13,
-                                  color: AppColors.text.withOpacity(.86),
-                                  fontWeight: FontWeight.normal,
-                                ),
-                                textAlign: TextAlign.start,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount:
-                            newsController.newsDetails.value.desc?.length ?? 0,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 0,
-                              vertical: 4,
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                            ),
-                            child: Text(
-                              newsController
-                                      .newsDetails.value.desc?[index].details ??
-                                  '',
-                              textAlign: TextAlign.justify,
-                              style: TextStyle(
-                                fontSize: AppSizes.size13,
-                                height: 1.3,
-                                color: AppColors.text.withOpacity(.7),
-                              ),
-                            ),
-                          );
-                        },
-                      )
-                    ],
-                  ),
-                )
-              : Center(
-                  child: CircularProgressIndicator(
-                    color: AppColors.primary,
-                  ),
-                );
-        },
-      ),
-      //bottomNavigationBar: BannerAds(),
     );
   }
 }

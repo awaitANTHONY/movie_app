@@ -13,14 +13,8 @@ class NewsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        var arguments = {
-          'newsTitle': newsItem.title ?? '',
-          'newsImage': newsItem.image ?? '',
-          'newsTime': newsItem.date ?? '',
-          'newsURL': newsItem.link ?? '',
-        };
         // AdsService.showInterstitialAd(() {
-        Get.to(() => NewsDetailsScreen(arguments));
+        Get.to(() => NewsDetailsScreen(newsItem));
         // });
       },
       child: Container(
@@ -119,14 +113,8 @@ class NewsWidgetLarge extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        var arguments = {
-          'newsTitle': newsItem.title ?? '',
-          'newsImage': newsItem.image ?? '',
-          'newsTime': newsItem.date ?? '',
-          'newsURL': newsItem.link ?? '',
-        };
         // AdsService.showInterstitialAd(() {
-        Get.to(() => NewsDetailsScreen(arguments));
+        Get.to(() => NewsDetailsScreen(newsItem));
         // });
       },
       child: Card(

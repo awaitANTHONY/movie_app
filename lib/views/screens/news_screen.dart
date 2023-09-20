@@ -7,6 +7,7 @@ import 'package:movie_app/models/news.dart';
 import 'package:movie_app/utils/helpers.dart';
 import '/consts/consts.dart';
 import '/controllers/news_controller.dart';
+import 'news_details_screen.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -47,7 +48,7 @@ class _NewsScreenState extends State<NewsScreen> {
 
               return InkWell(
                 onTap: () {
-                  //Get.to(() => NewsDetails2Screen(item));
+                  Get.to(() => NewsDetailsScreen(item));
                 },
                 child: Container(
                   color: AppColors.primary,
@@ -210,7 +211,7 @@ class NewsBlock extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        //Get.to(() => NewsDetails2Screen(newsItem!));
+        Get.to(() => NewsDetailsScreen(newsItem!));
       },
       child: Container(
         padding: const EdgeInsets.all(10),
