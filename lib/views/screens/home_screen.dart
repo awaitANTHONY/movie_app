@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:movie_app/views/widgets/home_channel_widget.dart';
 import '/views/widgets/slider_widget.dart';
 
@@ -18,7 +19,10 @@ class _HomeScreenState extends State<HomeScreen> {
           SliderWidget(),
           HomeSliderWidget(),
         ],
-      ),
+      ).animate().fade().scale().move(
+            delay: 600.ms,
+            duration: 600.ms,
+          ),
     );
   }
 }

@@ -209,79 +209,94 @@ class NewsBlock extends StatelessWidget {
   final NewsController newsController = Get.find();
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Get.to(() => NewsDetailsScreen(newsItem!));
-      },
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: SizedBox(
-                height: AppSizes.newSize(12),
-                width: AppSizes.newSize(12),
-                child: cachedNetworkImage(
-                  newsItem!.image!,
-                  fit: BoxFit.cover,
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      Builder(builder: (context) {
-                    return Center(
-                      child: SizedBox(
-                        width: AppSizes.newSize(2.3),
-                        height: AppSizes.newSize(2.3),
-                        child: CircularProgressIndicator(
-                          color: Theme.of(context).textTheme.bodyMedium!.color,
-                          strokeWidth: 3,
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10,
+      ).copyWith(bottom: 10),
+      child: InkWell(
+        onTap: () {
+          Get.to(() => NewsDetailsScreen(newsItem!));
+        },
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: AppColors.border,
+              width: 0.5,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: SizedBox(
+                  height: AppSizes.newSize(12),
+                  width: AppSizes.newSize(12),
+                  child: cachedNetworkImage(
+                    newsItem!.image!,
+                    fit: BoxFit.cover,
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) =>
+                            Builder(builder: (context) {
+                      return Center(
+                        child: SizedBox(
+                          width: AppSizes.newSize(2.3),
+                          height: AppSizes.newSize(2.3),
+                          child: CircularProgressIndicator(
+                            color:
+                                Theme.of(context).textTheme.bodyMedium!.color,
+                            strokeWidth: 3,
+                          ),
                         ),
-                      ),
-                    );
-                  }),
-                  errorWidget: (context, url, error) {
-                    var items = newsController.news;
+                      );
+                    }),
+                    errorWidget: (context, url, error) {
+                      var items = newsController.news;
 
-                    var item = items[Random().nextInt(items.length)];
+                      var item = items[Random().nextInt(items.length)];
 
-                    return Image.network(
-                      item.image!,
-                      fit: BoxFit.cover,
-                    );
-                  },
+                      return Image.network(
+                        item.image!,
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 5),
-                  Text(
-                    newsItem?.title ?? '',
-                    maxLines: 2,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.text2,
-                      fontSize: AppSizes.size14,
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 5),
+                    Text(
+                      newsItem?.title ?? '',
+                      maxLines: 2,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.text2,
+                        fontSize: AppSizes.size14,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      textAlign: TextAlign.justify,
                     ),
-                    textAlign: TextAlign.justify,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    newsItem?.date ?? '',
-                    maxLines: 2,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w300,
-                      color: AppColors.text2,
-                      fontSize: AppSizes.size12,
+                    const SizedBox(height: 12),
+                    Text(
+                      newsItem?.date ?? '',
+                      maxLines: 2,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        color: AppColors.text2,
+                        fontSize: AppSizes.size12,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

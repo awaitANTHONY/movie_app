@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:movie_app/controllers/home_controller.dart';
 import 'package:movie_app/models/home.dart';
 import 'package:movie_app/views/screens/all_screen.dart';
@@ -43,19 +46,19 @@ class _MenuScreenState extends State<MenuScreen> {
           decoration: BoxDecoration(
             color: AppColors.background2.withOpacity(0.0),
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: AppColors.border,
-              width: 0.5,
-            ),
+            // border: Border.all(
+            //   color: AppColors.border,
+            //   width: 0.5,
+            // ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 12,
-                ),
+                  horizontal: 10,
+                  //vertical: 12,
+                ).copyWith(bottom: 5),
                 child: Text(
                   menu.title!.toUpperCase(),
                   style: AppStyles.heading.copyWith(
@@ -65,13 +68,13 @@ class _MenuScreenState extends State<MenuScreen> {
                   textAlign: TextAlign.left,
                 ),
               ),
-              Divider(
-                color: AppColors.border,
-                height: 0.5,
-              ),
+              // Divider(
+              //   color: AppColors.border,
+              //   height: 0.5,
+              // ),
               Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 15,
+                  horizontal: 10,
                 ),
                 child: Column(
                   children: menu.tabs!.map((e) {
@@ -85,7 +88,10 @@ class _MenuScreenState extends State<MenuScreen> {
                 ),
               ),
             ],
-          ),
+          ).animate().fade().scale().move(
+                delay: 300.ms,
+                duration: 600.ms,
+              ),
         );
       },
       separatorBuilder: (context, index) => 10.0.spaceY,
@@ -104,43 +110,60 @@ class CustomListTIle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        if (e.provider == 'wordpress') {
-          Get.to(() => AllScreen(e.title!, e.arguments![0]));
-        } else if (e.provider == 'stream') {
-          Get.to(() => VideoScreen(e.arguments![0]));
-        }
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: 15,
-          horizontal: 5,
-        ),
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: hasBorder
-                ? BorderSide(color: AppColors.border, width: 0.5)
-                : BorderSide.none,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: ClipPath(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaX: 10,
+            sigmaY: 10,
+            tileMode: TileMode.clamp,
           ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              (e.title != '' ? e.title! : menu.title!).toUpperCase(),
-              style: AppStyles.text.copyWith(
-                fontSize: AppSizes.size13,
-                color: AppColors.text2.withOpacity(0.8),
+          child: InkWell(
+            onTap: () {
+              if (e.provider == 'wordpress') {
+                Get.to(() => AllScreen(e.title!, e.arguments![0]));
+              } else if (e.provider == 'stream') {
+                Get.to(() => VideoScreen(e.arguments![0]));
+              }
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                vertical: 15,
+                horizontal: 15,
               ),
-              textAlign: TextAlign.left,
+              decoration: BoxDecoration(
+                // border: Border(
+                //   bottom: hasBorder
+                //       ? BorderSide(color: AppColors.border, width: 0.5)
+                //       : BorderSide.none,
+                // ),
+                color: AppColors.background2.withOpacity(0.1),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(10),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    (e.title != '' ? e.title! : menu.title!).toUpperCase(),
+                    style: AppStyles.text.copyWith(
+                      fontSize: AppSizes.size14,
+                      color: AppColors.text2.withOpacity(0.8),
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: AppSizes.size18,
+                    color: AppColors.primary,
+                  )
+                ],
+              ),
             ),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: AppSizes.size18,
-              color: AppColors.primary,
-            )
-          ],
+          ),
         ),
       ),
     );

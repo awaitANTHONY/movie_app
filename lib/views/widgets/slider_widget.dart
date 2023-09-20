@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movie_app/controllers/movie_controller.dart';
 import 'package:movie_app/views/screens/movie_details_screen.dart';
+import 'package:movie_app/views/screens/video2_screen.dart';
 import '/consts/consts.dart';
 import '/utils/helpers.dart';
+import 'favourite_widget.dart';
 
 class SliderWidget extends StatelessWidget {
   SliderWidget({
@@ -85,6 +87,48 @@ class SliderWidget extends StatelessWidget {
                               ),
                               textAlign: TextAlign.center,
                               maxLines: 1,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          top: 10,
+                          right: 10,
+                          child: FavouriteWidget(item: item),
+                        ),
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: AppSizes.size30 + 10,
+                          child: Center(
+                            child: InkWell(
+                              onTap: () {
+                                Get.to(() => Video2Screen(item));
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 5,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  color: Colors.red.shade600,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.white.withOpacity(0.5),
+                                      spreadRadius: 2,
+                                      blurRadius: 7,
+                                      offset: Offset(0, 1),
+                                    ),
+                                  ],
+                                ),
+                                child: Text(
+                                  'Play Trailer',
+                                  style: TextStyle(
+                                    color: AppColors.text,
+                                    fontSize: AppSizes.size15,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         )

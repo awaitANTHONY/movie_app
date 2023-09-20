@@ -101,6 +101,7 @@ class MovieController extends GetxController {
         responseModel.forEach((element) {
           topNollywood.add(Movie.fromJson(element));
         });
+        topNollywood.shuffle();
       } else {
         showToast('Unknown error.');
       }

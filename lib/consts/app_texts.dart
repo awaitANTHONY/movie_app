@@ -1,3 +1,3 @@
 class AppTexts {
-  static const String appName = 'NetNaijaPro';
+  static const String appName = 'NetNaija Movies';
 }

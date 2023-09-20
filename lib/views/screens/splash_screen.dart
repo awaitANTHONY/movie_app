@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '/consts/consts.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -52,7 +53,15 @@ class SplashScreenState extends State<SplashScreen> {
               height: 50,
             ),
           ],
-        ),
+        )
+            .animate()
+            .fadeIn()
+            .scale()
+            .move(
+              delay: 300.ms,
+              duration: 600.ms,
+            )
+            .flipH(),
       ),
     );
   }

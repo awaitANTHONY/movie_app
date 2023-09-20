@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:movie_app/controllers/favorite_controller.dart';
 import 'package:movie_app/controllers/home_controller.dart';
 import 'package:movie_app/controllers/movie_controller.dart';
 import 'package:movie_app/controllers/news_controller.dart';
@@ -54,6 +55,7 @@ main() async {
         Get.put(HomeController());
         Get.put(MovieController());
         Get.put(NewsController());
+        Get.put(FavouriteController());
       },
       home: const MyApp(),
     ),

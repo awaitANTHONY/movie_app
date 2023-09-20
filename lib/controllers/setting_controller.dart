@@ -29,8 +29,8 @@ class SettingController extends GetxController {
   RxInt selectedIndex = 0.obs;
   RxInt currentIndex = 0.obs;
   RxBool isDarkMode = false.obs;
-  RxBool isNotificationEnable = false.obs;
-  RxBool isVibrationEnable = false.obs;
+  RxBool isNotificationEnable = true.obs;
+  RxBool isVibrationEnable = true.obs;
   RxBool isSubscribed = false.obs;
   RxBool enableDownload = true.obs;
 
@@ -194,8 +194,8 @@ class SettingController extends GetxController {
     isDarkMode.value = readStorage('isDarkMode') ?? false;
     Get.changeThemeMode(isDarkMode.value ? ThemeMode.dark : ThemeMode.light);
 
-    isNotificationEnable.value = readStorage('isNotificationEnable') ?? false;
-    //notificationStatus(isNotificationEnable.value);
+    isNotificationEnable.value = readStorage('isNotificationEnable') ?? true;
+    notificationStatus(isNotificationEnable.value);
 
     super.onInit();
     loadData();

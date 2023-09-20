@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:movie_app/utils/helpers.dart';
+import 'package:movie_app/views/screens/favorite_screen.dart';
 import 'package:movie_app/views/screens/home_screen.dart';
 import 'package:movie_app/views/screens/news_screen.dart';
 import 'package:movie_app/views/widgets/drawer_widget.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:share_plus/share_plus.dart';
 import '/consts/consts.dart';
 import 'menu_screen.dart';
 import 'movie_screen.dart';
@@ -52,12 +54,35 @@ class ParentScreenState extends State<ParentScreen> {
             ),
           );
         }),
+        iconTheme: IconThemeData(
+          color: AppColors.primary,
+        ),
         centerTitle: true,
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: AppColors.background,
           statusBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.light,
         ),
+        actions: [
+          Builder(builder: (context) {
+            return IconButton(
+              onPressed: () async {
+                final box = context.findRenderObject() as RenderBox?;
+
+                await Share.share(
+                  'Watch for NetNaija Movies',
+                  subject: AppTexts.appName,
+                  sharePositionOrigin:
+                      box!.localToGlobal(Offset.zero) & box.size,
+                );
+              },
+              icon: Icon(
+                Icons.share,
+                color: AppColors.primary,
+              ),
+            );
+          })
+        ],
       ),
       backgroundColor: AppColors.background,
       drawer: const AppDrawer(),
@@ -68,7 +93,7 @@ class ParentScreenState extends State<ParentScreen> {
             HomeScreen(),
             MenuScreen(),
             MovieScreen(),
-            NewsScreen(),
+            FavoriteScreen(),
             NewsScreen(),
           ],
         );
@@ -117,7 +142,7 @@ class ParentScreenState extends State<ParentScreen> {
             ),
             SalomonBottomBarItem(
               icon: ImageIcon(
-                const AssetImage('assets/images/icons/user.png'),
+                const AssetImage('assets/images/icons/heart.png'),
                 size: AppSizes.size16,
               ),
               title: Text(
