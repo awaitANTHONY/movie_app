@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:get_storage/get_storage.dart';
 import '/consts/consts.dart';
@@ -40,6 +41,21 @@ showToast(String message, [ToastGravity gravity = ToastGravity.BOTTOM]) {
       fontSize: 14.0,
     );
   }
+}
+
+Color drawerImageBGColorGetter(String image) {
+  Map<String, Color> imageBGColor = {
+    AppAssets.notification: HexColor('E3DDD6'),
+    AppAssets.refresh: HexColor('DDEAF1'),
+    AppAssets.vibration: HexColor('DDEEEF'),
+    AppAssets.help: HexColor('F1E2E3'),
+    AppAssets.privacy: HexColor('E5E6F7'),
+    AppAssets.review: HexColor('E5EAE0'),
+    AppAssets.terms: HexColor('E3EAF4'),
+    AppAssets.shareDrawer: HexColor('F0DEF1'),
+  };
+
+  return imageBGColor[image] ?? AppColors.background;
 }
 
 showSnackBar(String message, [callback, int duration = 5]) {

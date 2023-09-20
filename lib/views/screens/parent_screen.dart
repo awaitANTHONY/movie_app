@@ -60,7 +60,7 @@ class ParentScreenState extends State<ParentScreen> {
         ),
       ),
       backgroundColor: AppColors.background,
-      drawer: const DrawerWidget(),
+      drawer: const AppDrawer(),
       body: Obx(() {
         return IndexedStack(
           index: settingController.selectedIndex.value,

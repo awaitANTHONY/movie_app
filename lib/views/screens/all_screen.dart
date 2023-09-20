@@ -7,9 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:movie_app/consts/consts.dart';
 import 'package:movie_app/controllers/movie_controller.dart';
 import 'package:movie_app/utils/helpers.dart';
-import 'package:movie_app/views/widgets/new_video_widget.dart';
-import 'package:movie_app/views/widgets/video_widget.dart';
-
 import 'movie_details_screen.dart';
 
 class AllScreen extends StatefulWidget {

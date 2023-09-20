@@ -106,7 +106,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                   ),
                 ),
                 errorWidget: (context, url, error) {
-                  var item = newsController.news!
+                  var item = newsController.news
                       .where((element) => element.image != null)
                       .lastOrNull;
                   return cachedNetworkImage(
