@@ -56,7 +56,7 @@ class _AppDrawerState extends State<AppDrawer> with TickerProviderStateMixin {
 
     drawerWidgets = [
       Image.asset(
-        'assets/images/logo.ipng',
+        'assets/images/logo.png',
         height: AppSizes.newSize(4),
       ),
       SizedBox(height: AppSizes.newSize(4)),
@@ -152,7 +152,7 @@ class _AppDrawerState extends State<AppDrawer> with TickerProviderStateMixin {
                       ),
                     ),
                     Text(
-                      " TURBO FOOTBALL",
+                      " ${AppTexts.appName}",
                       style: TextStyle(
                         fontSize: AppSizes.size15,
                         fontWeight: FontWeight.bold,

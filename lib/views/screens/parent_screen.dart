@@ -69,7 +69,7 @@ class ParentScreenState extends State<ParentScreen> {
             MenuScreen(),
             MovieScreen(),
             NewsScreen(),
-            SettingScreen(),
+            NewsScreen(),
           ],
         );
       }),
@@ -117,11 +117,11 @@ class ParentScreenState extends State<ParentScreen> {
             ),
             SalomonBottomBarItem(
               icon: ImageIcon(
-                const AssetImage('assets/images/icons/news.png'),
+                const AssetImage('assets/images/icons/user.png'),
                 size: AppSizes.size16,
               ),
               title: Text(
-                "News",
+                "Favorites",
                 style: TextStyle(
                   fontSize: AppSizes.size12,
                 ),
@@ -129,11 +129,11 @@ class ParentScreenState extends State<ParentScreen> {
             ),
             SalomonBottomBarItem(
               icon: ImageIcon(
-                const AssetImage('assets/images/icons/user.png'),
+                const AssetImage('assets/images/icons/news.png'),
                 size: AppSizes.size16,
               ),
               title: Text(
-                "Profile",
+                "News",
                 style: TextStyle(
                   fontSize: AppSizes.size12,
                 ),

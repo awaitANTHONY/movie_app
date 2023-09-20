@@ -30,6 +30,9 @@ main() async {
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle.light,
+          iconTheme: IconThemeData(
+            color: AppColors.text2,
+          ),
         ),
         primaryColor: AppColors.primary,
         fontFamily: GoogleFonts.hind().fontFamily,

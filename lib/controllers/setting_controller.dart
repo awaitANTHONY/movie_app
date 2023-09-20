@@ -34,7 +34,7 @@ class SettingController extends GetxController {
   RxBool isSubscribed = false.obs;
   RxBool enableDownload = true.obs;
 
-  RxList<String> titles = ['Home', 'Menu', 'Top', 'News', 'Settings'].obs;
+  RxList<String> titles = ['Home', 'Menu', 'Top', 'Favorites', 'News'].obs;
 
   onItemTapped(int index) async {
     selectedIndex.value = index;
