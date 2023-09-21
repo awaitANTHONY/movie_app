@@ -404,7 +404,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             ),
                           ),
                           Container(
-                            padding: const EdgeInsets.all(10),
+                            height: 40,
+                            width: 40,
+                            alignment: Alignment.center,
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                               color: AppColors.text,

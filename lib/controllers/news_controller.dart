@@ -34,6 +34,7 @@ class NewsController extends GetxController {
 
         var jsonString = response.body;
         var responseModel = News.fromJson(jsonDecode(jsonString));
+
         if (response.statusCode == 200) {
           news.value = responseModel.data!;
 
@@ -102,5 +103,7 @@ class NewsController extends GetxController {
   void onInit() {
     super.onInit();
     loadNews();
+
+    dd('object');
   }
 }
